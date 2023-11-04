@@ -1,6 +1,5 @@
         google.charts.load('current', {
             'packages': ['geochart'],
-            // Note: You will need to get a Maps API key
             'mapsApiKey': 'YOUR_MAPS_API_KEY'
         });
         google.charts.setOnLoadCallback(fetchDataAndDrawChart);
