@@ -7,19 +7,44 @@
 		let globalServerData;
 		
         function fetchDataAndDrawChart() {
-            fetch('http://localhost:3000/data')
+            fetch('https://raw.githubusercontent.com/Nikola-Radojicic/google-charts-website/main/data98.csv')
 				.then(response => {
-					if (!response.ok || response.headers.get("content-length") === "0") {
-						throw new Error("Empty response or server error");
+					if (!response.ok {
+						throw new Error('Network response was not ok ' + response.statusText);
 					}
-					return response.json();
+					return response.text();
 				})
-				.then(data => {
+				.then(text => {
+					const data = parseCSV(text);
 					globalServerData = data;
 					drawRegionsMap(data);
 				})
-				.catch(error => console.error('Error fetching data:', error))	;
-        }
+				.catch(error => {
+					console.error('Error fetching data:', error);
+				});
+		}
+		
+		function parseCSV(csvText) {
+			const lines = csvText.split("\n");
+			const result = [];
+			const headers = lines[0].split(",");
+
+			for (let i = 1; i < lines.length; i++) {
+				if (!lines[i])
+					continue;
+				const obj = {};
+				const currentline = lines[i].split(",");
+
+				for (let j = 0; j < headers.length; j++) {
+					obj[headers[j]] = currentline[j];
+				}
+				result.push(obj);
+			}
+			return result;  // Return the parsed CSV as an array of objects
+		}
+		
+		
+		
 
         function drawRegionsMap(serverData) {
             const dataTable = [['country', 'Index']];
