@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        google.charts.load('current', {
+            'packages': ['geochart'],
+            // Note: You will need to get a Maps API key
+            'mapsApiKey': 'YOUR_MAPS_API_KEY'
+        });
+        google.charts.setOnLoadCallback(fetchDataAndDrawChart);
+		
+		let globalServerData;
+		
+        function fetchDataAndDrawChart() {
+            fetch('http://localhost:3000/data')
+				.then(response => {
+					if (!response.ok || response.headers.get("content-length") === "0") {
+						throw new Error("Empty response or server error");
+					}
+					return response.json();
+				})
+				.then(data => {
+					globalServerData = data;
+					drawRegionsMap(data);
+				})
+				.catch(error => console.error('Error fetching data:', error))	;
+        }
+
+        function drawRegionsMap(serverData) {
+            const dataTable = [['country', 'Index']];
+            for (let entry of serverData) {
+                const country = entry.country;
+                const index = calculateIndex(entry.costs, entry.stability, entry.in_pot, entry.int_coop, entry.governance, entry.env_regul, entry.sust_dev, entry.decarb, entry.risks);
+                dataTable.push([country, index]);
+            }
+
+            const data = google.visualization.arrayToDataTable(dataTable);
+            const options = {};
+            const chart = new google.visualization.GeoChart(document.getElementById('regions_div'));
+            chart.draw(data, options);
+        }
+
+        function calculateIndex(costs, stability, in_pot, int_coop, governance, env_regul, sust_dev, decarb, risks) {
+			const w_costs = parseFloat(document.getElementById("w_costs").value);
+            const w_stability = parseFloat(document.getElementById("w_stability").value);
+            const w_in_pot = parseFloat(document.getElementById("w_in_pot").value);
+            const w_int_coop = parseFloat(document.getElementById("w_int_coop").value);
+			const w_governance = parseFloat(document.getElementById("w_governance").value);
+			const w_env_regul = parseFloat(document.getElementById("w_env_regul").value);
+			const w_sust_dev = parseFloat(document.getElementById("w_sust_dev").value);
+			const w_decarb = parseFloat(document.getElementById("w_decarb").value);
+			const w_risks = parseFloat(document.getElementById("w_risks").value)
+					
+			
+			const w_Economy = parseFloat(document.getElementById("w_Economy").value);
+			const w_InnovationCooperation = parseFloat(document.getElementById("w_InnovationCooperation").value);
+			const w_Sustainability = parseFloat(document.getElementById("w_Sustainability").value);
+			const w_RegulationGovernance = parseFloat(document.getElementById("w_RegulationGovernance").value);
+			
+			
+			console.log('Costs:', costs);  // Debugging statement
+			console.log('Stability:', stability);  // Debugging statement
+			console.log('In_Pot:', in_pot);  // Debugging statement
+			console.log('Int_Coop:', int_coop);  // Debugging statement
+
+            const Economy = (w_costs * costs + w_stability * stability) / (w_costs + w_stability);
+            const InnovationCooperation = (w_in_pot * in_pot + w_int_coop * int_coop) / (w_in_pot + w_int_coop);
+			const RegulationGovernance = (w_governance * governance + w_env_regul * env_regul) / (w_governance + w_env_regul);
+			const Sustainability = (w_sust_dev * sust_dev + w_decarb * decarb + w_risks * risks) / (w_sust_dev + w_decarb + w_risks);
+			
+
+            return w_Economy * Economy + w_InnovationCooperation * InnovationCooperation + w_Sustainability * Sustainability + w_RegulationGovernance * RegulationGovernance;
+        }
+
+		function adjustWeights(excludedWeightId) {
+			const total = 1.0;
+
+			const w_Economy = parseFloat(document.getElementById("w_Economy").value);
+			const w_InnovationCooperation = parseFloat(document.getElementById("w_InnovationCooperation").value);
+			const w_Sustainability = parseFloat(document.getElementById("w_Sustainability").value);
+			const w_RegulationGovernance = parseFloat(document.getElementById("w_RegulationGovernance").value);
+
+			const totalExcludingCurrent = w_Economy + w_InnovationCooperation + w_Sustainability + w_RegulationGovernance 
+										- parseFloat(document.getElementById(excludedWeightId).value);
+    
+			const scaleFactor = (total - parseFloat(document.getElementById(excludedWeightId).value)) / totalExcludingCurrent;
+
+			if (excludedWeightId !== "w_Economy") document.getElementById("w_Economy").value = (w_Economy * scaleFactor).toFixed(2);
+			if (excludedWeightId !== "w_InnovationCooperation") document.getElementById("w_InnovationCooperation").value = (w_InnovationCooperation * scaleFactor).toFixed(2);
+			if (excludedWeightId !== "w_Sustainability") document.getElementById("w_Sustainability").value = (w_Sustainability * scaleFactor).toFixed(2);
+			if (excludedWeightId !== "w_RegulationGovernance") document.getElementById("w_RegulationGovernance").value = (w_RegulationGovernance * scaleFactor).toFixed(2);
+		}
+		
+		function adjustSubWeights(changedId, otherIds) {
+			const changedValue = parseFloat(document.getElementById(changedId).value);
+			const otherValuesSum = otherIds.reduce((acc, id) => acc + parseFloat(document.getElementById(id).value), 0);
+			const totalExcludingCurrent = 1 - changedValue;
+			const scaleFactor = totalExcludingCurrent / otherValuesSum;
+
+			otherIds.forEach(id => {
+				document.getElementById(id).value = (parseFloat(document.getElementById(id).value) * scaleFactor).toFixed(2);
+			});
+		}
+		
+		
+		function updateMainWeightsAndRedraw() {
+			updateWeightAndRedraw("w_Economy", "w_Economy_val");
+			updateWeightAndRedraw("w_InnovationCooperation", "w_InnovationCooperation_val");
+			updateWeightAndRedraw("w_Sustainability", "w_Sustainability_val");
+			updateWeightAndRedraw("w_RegulationGovernance", "w_RegulationGovernance_val");
+		}
+
+        function addEventListeners() {
+		document.getElementById("w_costs").addEventListener("input", function() {
+			    const complement = 1 - parseFloat(this.value);
+				document.getElementById("w_stability").value = complement.toFixed(2);
+				updateWeightAndRedraw("w_costs", "w_costs_val");
+				updateWeightAndRedraw("w_stability", "w_stability_val");
+            });
+            document.getElementById("w_stability").addEventListener("input", function() {
+			    const complement = 1 - parseFloat(this.value);
+				document.getElementById("w_costs").value = complement.toFixed(2);
+				updateWeightAndRedraw("w_stability", "w_stability_val");
+				updateWeightAndRedraw("w_costs", "w_costs_val");
+            });
+			
+			// Innovation Potential and International Cooperation
+            document.getElementById("w_in_pot").addEventListener("input", function() {
+			    const complement = 1 - parseFloat(this.value);
+				document.getElementById("w_int_coop").value = complement.toFixed(2);
+				updateWeightAndRedraw("w_in_pot", "w_in_pot_val");
+				updateWeightAndRedraw("w_int_coop", "w_int_coop_val");
+            });
+            document.getElementById("w_int_coop").addEventListener("input", function() {
+			    const complement = 1 - parseFloat(this.value);
+				document.getElementById("w_in_pot").value = complement.toFixed(2);
+				updateWeightAndRedraw("w_int_coop", "w_int_coop_val");
+				updateWeightAndRedraw("w_in_pot", "w_in_pot_val");
+            });
+
+			
+			// Sustainability sub-factors
+			document.getElementById("w_sust_dev").addEventListener("input", function() {
+				adjustSubWeights("w_sust_dev", ["w_decarb", "w_risks"]);
+				updateWeightAndRedraw("w_sust_dev", "w_sust_dev_val");
+				updateWeightAndRedraw("w_decarb", "w_decarb_val");
+				updateWeightAndRedraw("w_risks", "w_risks_val");
+			});
+			
+			document.getElementById("w_decarb").addEventListener("input", function() {
+				adjustSubWeights("w_decarb", ["w_sust_dev", "w_risks"]);
+				updateWeightAndRedraw("w_decarb", "w_decarb_val");
+				updateWeightAndRedraw("w_sust_dev", "w_sust_dev_val");
+				updateWeightAndRedraw("w_risks", "w_risks_val");
+			});
+			
+			document.getElementById("w_risks").addEventListener("input", function() {
+				adjustSubWeights("w_risks", ["w_sust_dev", "w_decarb"]);
+				updateWeightAndRedraw("w_risks", "w_risks_val");
+				updateWeightAndRedraw("w_sust_dev", "w_sust_dev_val");
+				updateWeightAndRedraw("w_decarb", "w_decarb_val");
+			});
+			
+			// Regulation & Governance sub-factors
+			document.getElementById("w_governance").addEventListener("input", function() {
+				const complement = 1 - parseFloat(this.value);
+				document.getElementById("w_env_regul").value = complement.toFixed(2);
+				updateWeightAndRedraw("w_governance", "w_governance_val");
+				updateWeightAndRedraw("w_env_regul", "w_env_regul_val");
+			});
+
+			document.getElementById("w_env_regul").addEventListener("input", function() {
+				const complement = 1 - parseFloat(this.value);
+				document.getElementById("w_governance").value = complement.toFixed(2);
+				updateWeightAndRedraw("w_env_regul", "w_env_regul_val");
+				updateWeightAndRedraw("w_governance", "w_governance_val");
+			});
+			
+			// FOR FOUR DIMENSIONS
+			
+			document.getElementById("w_Economy").addEventListener("input", function() {
+				adjustWeights("w_Economy");
+				updateMainWeightsAndRedraw();
+			});
+			
+			document.getElementById("w_InnovationCooperation").addEventListener("input", function() {
+				adjustWeights("w_InnovationCooperation");
+				updateMainWeightsAndRedraw();
+			});
+			
+			document.getElementById("w_Sustainability").addEventListener("input", function() {
+				adjustWeights("w_Sustainability");
+				updateMainWeightsAndRedraw();
+			});
+			
+			document.getElementById("w_RegulationGovernance").addEventListener("input", function() {
+				adjustWeights("w_RegulationGovernance");
+				updateMainWeightsAndRedraw();
+			});
+			
+			
+			
+
+        }
+		
+		function updateWeightAndRedraw(sliderId, valueId) {
+			const slider = document.getElementById(sliderId);
+			const valueSpan = document.getElementById(valueId);
+			valueSpan.innerText = slider.value;
+			if (globalServerData) {
+				drawRegionsMap(globalServerData);
+			}
+		}
+		
+		document.addEventListener("DOMContentLoaded", function() {
+			document.querySelectorAll('input[type="range"]').forEach((input) => {
+				input.addEventListener('change', () => {
+					const currentValue = parseFloat(input.value);
+					if (currentValue < 0 || currentValue > 1) {
+						alert('Please enter a value between 0 and 1');
+						input.value = currentValue < 0 ? 0 : 1;
+					}
+				});
+			});
+		 });
+		
+		
+		
+		
+        window.onload = addEventListeners;
+    </script>
+    <style>
+        /* CSS for the sidebar */
+		
+        .sidebar {
+			position: sticky; 
+			top: 5%; /* Adjust this as needed, depending on how high you want the sidebar to start */
+			width: 500px;
+			border: 1px solid #ccc;
+			padding: 20px;
+			box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+			overflow-y: auto; /* Add a vertical scrollbar if content is too much */
+			max-height: 90vh; /* Set a maximum height to ensure it doesn't overflow the viewport */
+			
+			
+			/* Flexbox settings for two columns */
+			display: flex;
+			flex-direction: row;
+			gap: 20px; /* Gap between the two columns */
+			justify-content: space-between;
+		}
+
+		body {
+			margin: 0; /* Reset default margin */
+			padding: 20px 40px; /* Some horizontal padding */
+			display: flex;
+		}
+
+
+		.container {
+			display: flex;
+			flex-direction: row;
+			gap: 20px;
+			width: 100%;
+			align-items: center; /* Added this line */
+		}
+		
+		
+		.column {
+			flex: 1; /* Each column will take up equal space */
+			display: flex;
+			flex-direction: column;
+			gap: 10px;
+		}
+		
+		.column-right {
+			align-self: center; /* Vertically centers this column within the .container */
+		}
+
+		
+		.slider-group {
+			display: flex;
+			flex-direction: column;
+			gap: 10px;
+			padding: 10px;
+			border: 1px solid #e0e0e0;
+			border-radius: 5px;
+			background-color: #f5f5f5; /* Light gray background for each slider group */
+			margin-bottom: 10px; /* Space between each slider group */
+		}
+		
+		/* Styling for the individual sliders */
+		.individual-slider {
+			display: flex;
+			flex-direction: column;
+			gap: 5px;
+		}
+		
+		/* Styling for the labels and values next to the sliders */
+		label, span {
+			font-size: 12px;
+			font-family: Arial, sans-serif;
+		}
+		
+		input[type="range"] {
+			width: 100%; /* Make the slider take up the full width of its container */
+		}
+		
+		.map-content {
+			flex:4;
+            padding-top: 100px;  /* Add some padding at the top to move the map upwards */
+			display: flex; /* Make the map-content a flex container */
+			align-items: center; /* Vertically center the map */
+			justify-content: center; /* Horizontally center the map */
+        }
+		
+		#regions_div {
+            width: 98%;  
+            height: 95%;  /* Set to full height of the parent .map-content div */
+        }
+		
+		.sidebar-left, .sidebar-right {
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+			gap: 10px;
+		}
+		
+		
+		
+    </style>
+</head>
+
+<body>
+<div class="sidebar">
+    <div class="container">
+	
+		<div class="column">
+        
+			<!-- Group for Economy -->
+			<div class="slider-group">
+				<label>Economy:</label>
+				
+				<!-- Slider for costs -->
+				<div class="individual-slider">
+					<label for="w_costs">Weight for costs:</label>
+					<input type="range" min="0" max="1" step="0.01" value="0.5" id="w_costs">
+					<span id="w_costs_val">0.5</span>
+				</div>
+				
+				<!-- Slider for stability -->
+				<div class="individual-slider">
+					<label for="w_stability">Weight for stability:</label>
+					<input type="range" min="0" max="1" step="0.01" value="0.5" id="w_stability">
+					<span id="w_stability_val">0.5</span>
+				</div>
+			</div>
+			
+			<!-- Group for Sustainability -->
+			<div class="slider-group">
+				<label>Sustainability:</label>
+				
+				<!-- Slider for sust_dev -->
+				<div class="individual-slider">
+					<label for="w_sust_dev">Weight for development:</label>
+					<input type="range" min="0" max="1" step="0.01" value="0.33" id="w_sust_dev">
+					<span id="w_sust_dev_val">0.33</span>
+				</div>
+
+				<!-- Slider for decarb -->
+				<div class="individual-slider">
+					<label for="w_decarb">Weight for decarbonisation:</label>
+					<input type="range" min="0" max="1" step="0.01" value="0.33" id="w_decarb">
+					<span id="w_decarb_val">0.33</span>
+				</div>
+
+				<!-- Slider for risks -->
+				<div class="individual-slider">
+					<label for="w_risks">Weight for risks:</label>
+					<input type="range" min="0" max="1" step="0.01" value="0.33" id="w_risks">
+					<span id="w_risks_val">0.33</span>
+				</div>
+			</div>
+			
+			
+			<!-- Group for Regulation & Governance -->
+			<div class="slider-group">
+				<label>Regulation & Governance:</label>
+		
+				<!-- Slider for governance -->
+				<div class="individual-slider">
+					<label for="w_governance">Weight for governance:</label>
+					<input type="range" min="0" max="1" step="0.01" value="0.5" id="w_governance">
+					<span id="w_governance_val">0.5</span>
+				</div>
+		
+				<!-- Slider for env_regul -->
+				<div class="individual-slider">
+					<label for="w_env_regul">Weight for Environmental regulation:</label>
+					<input type="range" min="0" max="1" step="0.01" value="0.5" id="w_env_regul">
+					<span id="w_env_regul_val">0.5</span>
+				</div>
+			</div>
+					
+			
+			<!-- Group for Innovation & Cooperation -->
+			<div class="slider-group">
+				<label>Innovation & Cooperation:</label>
+				
+				<!-- Slider for in_pot -->
+				<div class="individual-slider">
+					<label for="w_in_pot">Weight for innovation potential:</label>
+					<input type="range" min="0" max="1" step="0.01" value="0.5" id="w_in_pot">
+					<span id="w_in_pot_val">0.5</span>
+				</div>
+				
+				<!-- Slider for int_coop -->
+				<div class="individual-slider">
+					<label for="w_int_coop">Weight for international cooperation:</label>
+					<input type="range" min="0" max="1" step="0.01" value="0.5" id="w_int_coop">
+					<span id="w_int_coop_val">0.5</span>
+				</div>
+			</div>
+		</div>
+
+        <div class="column column-right">
+			<!-- Sliders for the factors themselves -->
+			<div class="slider-group">
+				<label for="w_Economy">Weight for Economy:</label>
+				<input type="range" min="0" max="1" step="0.01" value="0.25" id="w_Economy">
+				<span id="w_Economy_val">0.25</span>
+			</div>
+			
+			<div class="slider-group">
+				<label for="w_Sustainability">Weight for Sustainability:</label>
+				<input type="range" min="0" max="1" step="0.01" value="0.25" id="w_Sustainability">
+				<span id="w_Sustainability_val">0.25</span>
+			</div>		
+			
+			<div class="slider-group">
+				<label for="w_RegulationGovernance">Weight for Regulation & Governance:</label>
+				<input type="range" min="0" max="1" step="0.01" value="0.25" id="w_RegulationGovernance">
+				<span id="w_RegulationGovernance_val">0.25</span>
+			</div>			
+			
+			<div class="slider-group">
+				<label for="w_InnovationCooperation">Weight for Innovation & Cooperation:</label>
+				<input type="range" min="0" max="1" step="0.01" value="0.25" id="w_InnovationCooperation">
+				<span id="w_InnovationCooperation_val">0.25</span>
+			</div>
+
+			<button onclick="fetchDataAndDrawChart()">Update</button>
+		</div>
+	</div>
+</div>
+
+	<div class="content">
+		<div id="regions_div" style="width: 900px; height: 500px;"></div>
+	</div>
+</body>
+
+</html>
