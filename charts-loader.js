@@ -9,7 +9,7 @@
         function fetchDataAndDrawChart() {
             fetch('https://raw.githubusercontent.com/Nikola-Radojicic/google-charts-website/main/data98.csv')
 				.then(response => {
-					if (!response.ok {
+					if (!response.ok) {
 						throw new Error('Network response was not ok ' + response.statusText);
 					}
 					return response.text();
