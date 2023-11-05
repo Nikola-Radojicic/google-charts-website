@@ -1,4 +1,112 @@
-        google.charts.load('current', {
+        // defining country names w/o using Google API map keys
+		
+		const countryNames = {
+		  "AL": "Albania",
+		  "DZ": "Algeria",
+		  "AO": "Angola",
+		  "AR": "Argentina",
+		  "AU": "Australia",
+		  "BH": "Bahrain",
+		  "BD": "Bangladesh",
+		  "BE": "Belgium",
+		  "BJ": "Benin",
+		  "BA": "Bosnia and Herzegovina",
+		  "BR": "Brazil",
+		  "BG": "Bulgaria",
+		  "KH": "Cambodia",
+		  "CM": "Cameroon",
+		  "CA": "Canada",
+		  "CL": "Chile",
+		  "CN": "China",
+		  "CO": "Colombia",
+		  "CG": "Congo",
+		  "CD": "Congo, DR",
+		  "CR": "Costa Rica",
+		  "CI": "Côte d'Ivoire",
+		  "HR": "Croatia",
+		  "DK": "Denmark",
+		  "DO": "Dominican Republic",
+		  "EC": "Ecuador",
+		  "EG": "Egypt",
+		  "ER": "Eritrea",
+		  "FI": "Finland",
+		  "FR": "France",
+		  "GH": "Ghana",
+		  "GR": "Greece",
+		  "GT": "Guatemala",
+		  "GN": "Guinea",
+		  "HT": "Haiti",
+		  "HN": "Honduras",
+		  "IN": "India",
+		  "ID": "Indonesia",
+		  "IR": "Iran",
+		  "IE": "Ireland",
+		  "IL": "Israel",
+		  "IT": "Italy",
+		  "JM": "Jamaica",
+		  "JP": "Japan",
+		  "KE": "Kenya",
+		  "KR": "Korea Republic",
+		  "KW": "Kuwait",
+		  "LB": "Lebanon",
+		  "LR": "Liberia",
+		  "MG": "Madagascar",
+		  "MY": "Malaysia",
+		  "MR": "Mauritania",
+		  "MX": "Mexico",
+		  "ME": "Montenegro",
+		  "MA": "Morocco",
+		  "MZ": "Mozambique",
+		  "MM": "Myanmar",
+		  "NL": "Netherlands",
+		  "NZ": "New Zealand",
+		  "NI": "Nicaragua",
+		  "NG": "Nigeria",
+		  "NO": "Norway",
+		  "OM": "Oman",
+		  "PK": "Pakistan",
+		  "PA": "Panama",
+		  "PG": "Papua New Guinea",
+		  "PE": "Peru",
+		  "PH": "Philippines",
+		  "PL": "Poland",
+		  "PT": "Portugal",
+		  "QA": "Qatar",
+		  "RO": "Romania",
+		  "RU": "Russia",
+		  "SA": "Saudi Arabia",
+		  "SN": "Senegal",
+		  "SL": "Sierra Leone",
+		  "SG": "Singapore",
+		  "SB": "Solomon Islands",
+		  "SO": "Somalia",
+		  "ZA": "South Africa",
+		  "ES": "Spain",
+		  "LK": "Sri Lanka",
+		  "SD": "Sudan",
+		  "SE": "Sweden",
+		  "TZ": "Tanzania",
+		  "TH": "Thailand",
+		  "TG": "Togo",
+		  "TN": "Tunisia",
+		  "TR": "Türkiye",
+		  "UA": "Ukraine",
+		  "AE": "United Arab Emirates",
+		  "GB": "United Kingdom",
+		  "US": "United States",
+		  "UY": "Uruguay",
+		  "VU": "Vanuatu",
+		  "VE": "Venezuela",
+		  "VN": "Vietnam",
+		  "YE": "Yemen"
+		};
+		
+		
+		
+		
+		
+		
+		google.charts.load('current', {
             'packages': ['geochart'],
             'mapsApiKey': 'YOUR_MAPS_API_KEY'
         });
@@ -51,7 +159,8 @@
             for (let entry of serverData) {
                 const country = entry.country;
                 const index = calculateIndex(entry.costs, entry.stability, entry.in_pot, entry.int_coop, entry.governance, entry.env_regul, entry.sust_dev, entry.decarb, entry.risks);
-                dataTable.push([country, index]);
+                const countryName = countryNames[country] || country;
+				dataTable.push([countryName, index]);
             }
 
             const data = google.visualization.arrayToDataTable(dataTable);
