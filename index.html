@@ -6,241 +6,526 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RE Imports Partner Selection</title>
 	
-    <style>
-        /* CSS for the sidebar */
-		
-        .sidebar {
-			position: sticky; 
-			top: 5%; /* Adjust this as needed, depending on how high you want the sidebar to start */
-			width: 500px;
-			border: 1px solid #ccc;
-			padding: 1px;
-			box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
-			overflow-y: auto; /* Add a vertical scrollbar if content is too much */
-			max-height: 90vh; /* Set a maximum height to ensure it doesn't overflow the viewport */
-			
-			
-			/* Flexbox settings for two columns */
-			display: flex;
-			flex-direction: row;
-			gap: 1px; /* Gap between the two columns */
-			justify-content: space-between;
-		}
+	<!-- Include jQuery first -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-		body {
-			margin: 0; /* Reset default margin */
-			padding: 20px 40px; /* Some horizontal padding */
-			display: flex;
-		}
+	<!-- Then include Select2 CSS -->
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+
+	<!-- And then include Select2 JS -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 
 
-		.container {
-			display: flex;
-			flex-direction: row;
-			gap: 20px;
-			width: 100%;
-			align-items: center; /* Added this line */
-		}
-		
-		
-		.column {
-			flex: 1; /* Each column will take up equal space */
-			display: flex;
-			flex-direction: column;
-			gap: 10px;
-		}
-		
-		.column-right {
-			align-self: center; /* Vertically centers this column within the .container */
-		}
+	
+	
+<style>
+    /* CSS for the sidebar */
+	
+	.title-container {
+		position: absolute;
+		top: 0; /* Align to the top of the main-content */
+		left: 0; /* Align to the left of the main-content */
+		right: 0; /* Align to the right of the main-content to ensure full width */
+		height: 5vh; /* Set your desired height */
+		line-height: 0vh; 
+		text-align: center; /* Center the text horizontally */
+		padding: 0px 0; /* Add some padding inside the title container */
+		z-index: 100; /* Ensure it's above other content */
+		background: #FFF; /* Optional: Set a background if you need it to stand out over the map */
+		font-family: Cambria;
+		color: #000;
+		font-size: 1.5vh;
+		flex-shrink: 1;
+	}
+	
 
+    #logo {
+		position: fixed;  /* Fixed positioning relative to the viewport */
+		top: 10px;       /* Adjust as necessary for spacing from the top */
+		right: 10px;     /* Adjust as necessary for spacing from the right */
+		z-index: 100;   /* Ensures the logo stays on top of other content */
+		width: 150px; 
+		height: auto;
+		opacity: 0.7;
+		flex-shrink: 1;
+	}
+	
+	
+	.sidebar {
+		position: sticky;
+		top: 0%;
+		flex-basis: 400px;
+		height: 65vh; /* Height can be adjusted as needed */
+		border: 1px solid #ccc;
+		padding: 10px;
+		box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+		overflow-y: auto;
+		max-height: 90vh;
+		flex-shrink: 1;
+		flex-grow: 0; /* Do not allow the sidebar to grow */
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		background: rgba(220 220 220);
+	}
+
+    .content-area {
+		display: flex;
+		justify-content: center; /* Center children horizontally */
+		align-items: center;     /* Center children vertically */
+		height: 100%;        /* Full height of the viewport */
+		width: 100%;            /* Full width of the viewport */
+		overflow: auto;
+    }
+
+    body, html {
+		flex-grow: 1;
+		height: 100%;
+		margin-left: 15px;
+		margin-right: 0px;
+		margin-bottom: 15px;
+		padding: 0;
+		display: flex;
+		flex-direction: column;
+    }
+
+    .container {
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+        width: 100%;
+        align-items: center;
+		flex-shrink: 1;
+    }
+
+    .column {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .column-right {
+        align-self: center;
+		gap: 10px;
+    }
+
+    .slider-group {
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
+        padding: 1px;
+        border: 1px solid #e0e0e0;
+        border-radius: 5px;
+        background-color: #f5f5f5;
+        margin-bottom: 1px;
+        width: 100%; /* Add this line if you want the slider group to take the full width */
+		max-height: calc((100vh - 20px) / 4); 
 		
-		.slider-group {
-			display: flex;
-			flex-direction: column;
-			gap: 1px;
-			padding: 5px;
-			border: 1px solid #e0e0e0;
-			border-radius: 5px;
-			background-color: #f5f5f5; /* Light gray background for each slider group */
-			margin-bottom: 1px; /* Space between each slider group */
-		}
-		
-		/* Styling for the individual sliders */
-		.individual-slider {
-			display: flex;
-			flex-direction: column;
-			gap: 1px;
-		}
-		
-		/* Styling for the labels and values next to the sliders */
-		label, span {
-			font-size: 10px;
-			font-family: Cambria;
-		}
-		
-		input[type="range"] {
-			width: 100%; /* Make the slider take up the full width of its container */
-		}
-		
-		.map-content {
-			flex:4;
-            padding-top: 100px;  /* Add some padding at the top to move the map upwards */
-			display: flex; /* Make the map-content a flex container */
-			align-items: center; /* Vertically center the map */
-			justify-content: center; /* Horizontally center the map */
-        }
-		
-		#regions_div {
-            width: 98%;  
-            height: 95%;  /* Set to full height of the parent .map-content div */
-        }
-		
-		.sidebar-left, .sidebar-right {
-			flex: 1;
-			display: flex;
-			flex-direction: column;
-			gap: 10px;
-		}
-		
-		.bold-label {
-			font-weight: bold; /* This will make text of elements with this class bold */
-		}
-		
-		
-		
-    </style>
+    }
+	
+	input[type="range"] {
+        width: calc(100% - 2px); /* Subtract 2px to account for the border */
+        margin: 0 auto; /* Center the slider */
+    }
+	
+	
+
+	
+    .individual-slider {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+	
+    label, span {
+        font-size: 10px;
+        font-family: Cambria;
+    }
+	
+    input[type="range"] {
+        width: 100%;
+    }
+
+	.map-content {
+		flex-grow: 1; /* Allow the map to grow */
+		display: flex; /* Use flexbox for map content */
+		justify-content: center; /* Center map horizontally */
+		align-items: center; /* Center map vertically */
+		position: relative;
+		z-index: 20;
+	}
+
+	#regions_div {
+		width: 100%; /* Full width of its container */
+		height: auto; /* Height is automatic, so it scales with the width */
+		min-height: 50vh; /* You can set a minimum height to ensure visibility */
+		max-height: calc(100vh - 5vh);
+		margin-top: 5vh;
+		position: relative; /* if not already positioned */
+		z-index: 20; /* Higher z-index to be above the logo */
+	}
+	
+	
+
+	.sidebar-left {
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+	}
+	
+	.sidebar-left > .slider-group {
+		width: 100%; /* This will ensure it occupies the full width available */
+		margin-top: auto;
+		margin-bottom: auto;
+	}
+
+    .bold-label {
+        font-weight: bold;
+    }
+
+    #country-comparison-output div {
+        margin-bottom: 0px;
+    }
+
+    #country-comparison-output span {
+        font-weight: bold;
+    }
+
+    #country-comparison-output span + span {
+        margin-left: 10px;
+    }
+	
+	#country-comparison-output div:nth-child(2) .first-column,
+	#country-comparison-output div:nth-child(2) .second-column,
+	#country-comparison-output div:nth-child(2) .third-column {
+		border-bottom: 1px solid #000; /* Adjust color and size as needed */
+	}
+
+    .country-selection, #country-comparison-output {
+        margin-top: 10px;
+        width: 100%;
+    }
+
+
+    .output-label {
+        font-weight: bold;
+        display: block;
+    }
+
+    .main-content {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		margin-top: auto;
+		margin-right: auto;
+		margin-bottom: auto;
+		margin-left: auto;          /* Auto margins for horizontal centering */
+		max-width: 100%;         /* Ensure it does not exceed the width of the viewport */
+		overflow: hidden;
+		height: auto
+    }
+	
+	.country-dropdown {
+		max-width: 200px; /* or any other value that suits your layout */
+		margin: 0 auto; /* This will center the dropdown if the container is wider */
+	}
+
+	.comparison-container {
+		display: flex; /* Align children side by side */
+		flex-direction: column;
+		justify-content: flex-start; /* Start children at the beginning */
+		align-items: center; /* Align children at the top */
+		gap: 10px; /* Adjust this value to manage the space between elements */
+		width: 100%,
+		margin-top: 0px;
+		margin-bottom: 0px;
+		background: rgba(220 220 220);
+	}
+	
+	
+	
+
+	.comparison-text-box {
+		border: 0px solid #ccc; /* Example border */
+		padding: 10px;
+		width: 200px; /* Adjust width as necessary */
+		background-color: rgba(0, 0, 0, 0); /* Light grey background */
+		box-shadow: 0px 0px 0px rgba(0, 0, 0, 0); /* Optional shadow for aesthetics */
+		margin-left: 0px; /* Space from the comparison output */
+	}
+	
+	.comparison-text-box p {
+		margin: 5px 0; /* Spacing between paragraphs */
+        font-size: 10px;
+        font-family: Cambria;
+	}
+	
+	#country-comparison-output .first-column {
+		font-family: Cambria; /* Change to your desired font-family */
+		font-size: 10px; /* Change to your desired font-size */
+		color: #333; /* Optional: Change to your desired font color */
+		text-align: left; /* Optional: Align text to the left */
+	}
+	
+
+</style>
+
+	
+
+	
 </head>
 
 <body>
-<div class="sidebar">
-	
-    <div class="container">
-	
-		<div class="column">
-        
-			<!-- Group for Economy -->
-			<div class="slider-group">
-				<label class="bold-label">Economy:</label>
-				
-				<!-- Slider for costs -->
-				<div class="individual-slider">
-					<label for="w_costs">costs:</label>
-					<input type="range" min="0" max="1" step="0.01" value="0.5" id="w_costs">
-					<span id="w_costs_val">0.5</span>
-				</div>
-				
-				<!-- Slider for stability -->
-				<div class="individual-slider">
-					<label for="w_stability">stability:</label>
-					<input type="range" min="0" max="1" step="0.01" value="0.5" id="w_stability">
-					<span id="w_stability_val">0.5</span>
-				</div>
-			</div>
-			
-			<!-- Group for Sustainability -->
-			<div class="slider-group">
-				<label class="bold-label">Sustainability:</label>
-				
-				<!-- Slider for sust_dev -->
-				<div class="individual-slider">
-					<label for="w_sust_dev">development:</label>
-					<input type="range" min="0" max="1" step="0.01" value="0.33" id="w_sust_dev">
-					<span id="w_sust_dev_val">0.33</span>
-				</div>
 
-				<!-- Slider for decarb -->
-				<div class="individual-slider">
-					<label for="w_decarb">decarbonisation:</label>
-					<input type="range" min="0" max="1" step="0.01" value="0.33" id="w_decarb">
-					<span id="w_decarb_val">0.33</span>
-				</div>
-
-				<!-- Slider for risks -->
-				<div class="individual-slider">
-					<label for="w_risks">risks:</label>
-					<input type="range" min="0" max="1" step="0.01" value="0.33" id="w_risks">
-					<span id="w_risks_val">0.33</span>
-				</div>
-			</div>
+	<div class="content-area">
+	
+		<div class="sidebar">
 			
+			<div class="container">
 			
-			<!-- Group for Regulation & Governance -->
-			<div class="slider-group">
-				<label class="bold-label">Regulation & Governance:</label>
-		
-				<!-- Slider for governance -->
-				<div class="individual-slider">
-					<label for="w_governance">governance:</label>
-					<input type="range" min="0" max="1" step="0.01" value="0.5" id="w_governance">
-					<span id="w_governance_val">0.5</span>
-				</div>
-		
-				<!-- Slider for env_regul -->
-				<div class="individual-slider">
-					<label for="w_env_regul">environmental regulation:</label>
-					<input type="range" min="0" max="1" step="0.01" value="0.5" id="w_env_regul">
-					<span id="w_env_regul_val">0.5</span>
-				</div>
-			</div>
+				<div class="column">
+				
+					<!-- Group for Economy -->
+					<div class="slider-group">
+						<label class="bold-label">Economy:</label>
+						
+						<!-- Slider for costs -->
+						<div class="individual-slider">
+							<label for="w_costs">costs:  <span id="w_costs_val">0.5</span></label>
+							<input type="range" min="0" max="1" step="0.01" value="0.5" id="w_costs">
+						</div>
+						
+						<!-- Slider for stability -->
+						<div class="individual-slider">
+							<label for="w_costs">stability: <span id="w_stability_val">0.5</span></label>
+							<input type="range" min="0" max="1" step="0.01" value="0.5" id="w_stability">
+						</div>
+					</div>
 					
-			
-			<!-- Group for Innovation & Cooperation -->
-			<div class="slider-group">
-				<label class="bold-label">Innovation & Cooperation:</label>
-				
-				<!-- Slider for in_pot -->
-				<div class="individual-slider">
-					<label for="w_in_pot">innovation potential:</label>
-					<input type="range" min="0" max="1" step="0.01" value="0.5" id="w_in_pot">
-					<span id="w_in_pot_val">0.5</span>
-				</div>
-				
-				<!-- Slider for int_coop -->
-				<div class="individual-slider">
-					<label for="w_int_coop">international cooperation:</label>
-					<input type="range" min="0" max="1" step="0.01" value="0.5" id="w_int_coop">
-					<span id="w_int_coop_val">0.5</span>
-				</div>
-			</div>
-		</div>
+					<!-- Group for Sustainability -->
+					<div class="slider-group">
+						<label class="bold-label">Sustainability:</label>
+						
+						<!-- Slider for sust_dev -->
+						<div class="individual-slider">
+							<label for="w_sust_dev">development: <span id="w_sust_dev_val">0.33</span></label>
+							<input type="range" min="0" max="1" step="0.01" value="0.33" id="w_sust_dev">
+							
+						</div>
 
-        <div class="column column-right">
-			<!-- Sliders for the factors themselves -->
-			<div class="slider-group">
-				<label for="w_Economy">Weight for Economy:</label>
-				<input type="range" min="0" max="1" step="0.01" value="0.25" id="w_Economy">
-				<span id="w_Economy_val">0.25</span>
+						<!-- Slider for decarb -->
+						<div class="individual-slider">
+							<label for="w_decarb">decarbonisation: <span id="w_decarb_val">0.33</span></label>
+							<input type="range" min="0" max="1" step="0.01" value="0.33" id="w_decarb">
+							
+						</div>
+
+						<!-- Slider for risks -->
+						<div class="individual-slider">
+							<label for="w_risks">risks: <span id="w_risks_val">0.33</span></label>
+							<input type="range" min="0" max="1" step="0.01" value="0.33" id="w_risks">
+							
+						</div>
+					</div>
+					
+					
+					<!-- Group for Regulation & Governance -->
+					<div class="slider-group">
+						<label class="bold-label">Regulation & Governance:</label>
+				
+						<!-- Slider for governance -->
+						<div class="individual-slider">
+							<label for="w_governance">governance: <span id="w_governance_val">0.5</span></label>
+							<input type="range" min="0" max="1" step="0.01" value="0.5" id="w_governance">
+							
+						</div>
+				
+						<!-- Slider for env_regul -->
+						<div class="individual-slider">
+							<label for="w_env_regul">environmental regulation: <span id="w_env_regul_val">0.5</span></label>
+							<input type="range" min="0" max="1" step="0.01" value="0.5" id="w_env_regul">
+							
+						</div>
+					</div>
+							
+					
+					<!-- Group for Innovation & Cooperation -->
+					<div class="slider-group">
+						<label class="bold-label">Innovation & Cooperation:</label>
+						
+						<!-- Slider for in_pot -->
+						<div class="individual-slider">
+							<label for="w_in_pot">innovation potential: <span id="w_in_pot_val">0.5</span></label>
+							<input type="range" min="0" max="1" step="0.01" value="0.5" id="w_in_pot">
+							
+						</div>
+						
+						<!-- Slider for int_coop -->
+						<div class="individual-slider">
+							<label for="w_int_coop">international cooperation: <span id="w_int_coop_val">0.5</span></label>
+							<input type="range" min="0" max="1" step="0.01" value="0.5" id="w_int_coop">
+							
+						</div>
+					</div>
+				</div>
+
+				<div class="column column-right">
+					<div class="slider-group">
+						<!-- Sliders for the factors themselves -->
+						<div class="individual-slider">
+							<label for="w_Economy"><strong>Economy: </strong><span id="w_Economy_val">0.25</span></label>
+							<input type="range" min="0" max="1" step="0.01" value="0.25" id="w_Economy">
+							
+						</div>
+						
+						<div class="individual-slider">
+							<label for="w_Sustainability"><strong>Sustainability: </strong><span id="w_Sustainability_val">0.25</span></label>
+							<input type="range" min="0" max="1" step="0.01" value="0.25" id="w_Sustainability">
+							
+						</div>		
+						
+						<div class="individual-slider">
+							<label for="w_RegulationGovernance"><strong>Regulation & Governance: </strong><span id="w_RegulationGovernance_val">0.25</span></label>
+							<input type="range" min="0" max="1" step="0.01" value="0.25" id="w_RegulationGovernance">
+							
+						</div>			
+						
+						<div class="individual-slider">
+							<label for="w_InnovationCooperation"><strong>Innovation & Cooperation: </strong><span id="w_InnovationCooperation_val">0.25</span></label>
+							<input type="range" min="0" max="1" step="0.01" value="0.25" id="w_InnovationCooperation">
+							
+						</div>						
+					</div>
+					<button onclick="resetSliders()">Reset</button>
+				</div>
+
+			
 			</div>
 			
-			<div class="slider-group">
-				<label for="w_Sustainability">Weight for Sustainability:</label>
-				<input type="range" min="0" max="1" step="0.01" value="0.25" id="w_Sustainability">
-				<span id="w_Sustainability_val">0.25</span>
-			</div>		
-			
-			<div class="slider-group">
-				<label for="w_RegulationGovernance">Weight for Regulation & Governance:</label>
-				<input type="range" min="0" max="1" step="0.01" value="0.25" id="w_RegulationGovernance">
-				<span id="w_RegulationGovernance_val">0.25</span>
+		</div>
+		<div class="main-content">
+			<div class="title-container">
+				<a href="https://www.example.com" target="_blank">
+					<h1>Comparing renewable energy import options</h1>
+				</a>
 			</div>			
+			<a href="https://www.tu-darmstadt.de/clean-circles/about_cc/index.de.jsp" target="_blank" id="logo-link"style="color: transparent;">		
+				<img src="C:\Users\nutzer\Desktop\Clean Circles\google-charts-website\Clean_Circles_Logo.jpg" alt="Logo" id="logo" />
+			</a>
+			<div id="regions_div" style="width: 900px; height: 700px;"></div>
+
+
+
 			
-			<div class="slider-group">
-				<label for="w_InnovationCooperation">Weight for Innovation & Cooperation:</label>
-				<input type="range" min="0" max="1" step="0.01" value="0.25" id="w_InnovationCooperation">
-				<span id="w_InnovationCooperation_val">0.25</span>
+			
+			<div class="comparison-container">
+				<!-- Country Comparison Output -->
+				<div id="country-comparison-output" style="display: table; width: 50%; margin-top: 5px;">
+					<!-- Row for dropdowns -->
+					<div style="display: table-row;">
+						<div class="first-column" style="display: table-cell;width: 30%;"> <!-- Empty cell for alignment -->
+							<span style="font-family: Cambria, sans-serif; font-size: 12px;">Country Comparison</span>
+						</div>
+						<div class="second-column" style="display: table-cell;width: 30%;">
+							<!-- First country dropdown -->
+							<div class="country-dropdown" style="text-align: center">
+								<select id="country1" class="search-dropdown" style="width: 100%;">
+								<option value="" selected disabled>Select Country</option>
+								  <!-- Options will be populated by JavaScript -->
+								</select>
+							</div>
+						</div>
+						<div class="third-column" style="display: table-cell;width: 30%;">
+							<!-- Second country dropdown -->
+							<div class="country-dropdown" style="text-align: center">
+								<select id="country2" class="search-dropdown" style="width: 100%;">
+								<option value="" selected disabled>Select Country</option>
+								  <!-- Options will be populated by JavaScript -->
+								</select>
+							</div>
+						</div>
+					</div>
+					<!-- Row for Overall index -->
+					<div style="display: table-row;">
+						<div class="first-column" style="display: table-cell; padding: 0px; width: 30%;">
+							Overall index
+						</div>
+						<div class="second-column" style="display: table-cell; padding: 0px; width: 20%; text-align: center;">
+							<span id="country1-result">...</span>
+						</div>
+						<div class="third-column" style="display: table-cell; padding: 0px; width: 20%; text-align: center;">
+							<span id="country2-result">...</span>
+						</div>
+					</div>
+					<!-- ...other rows follow in the same pattern... -->
+					<!-- Row for Economy -->
+					<div style="display: table-row;">
+						<div class="first-column" style="display: table-cell; padding: 0px; width: 20%;">
+							Economy
+						</div>
+						<div class="second-column" style="display: table-cell; padding: 0px; width: 20%; text-align: center;">
+							<span id="country1-economy">...</span>
+						</div>
+						<div class="third-column" style="display: table-cell; padding: 0px; width: 20%; text-align: center;">
+							<span id="country2-economy">...</span>
+						</div>
+					</div>
+					<!-- Row for Innovation & Cooperation -->
+					<div style="display: table-row;">
+						<div class="first-column" style="display: table-cell; padding: 0px; width: 20%;">
+							Innovation & Cooperation
+						</div>
+						<div class="second-column" style="display: table-cell; padding: 0px; width: 20%; text-align: center;">
+							<span id="country1-innovationCooperation">...</span>
+						</div>
+						<div class="third-column" style="display: table-cell; padding: 0px; width: 20%; text-align: center;">
+							<span id="country2-innovationCooperation">...</span>
+						</div>
+					</div>
+					<!-- Row for Sustainability -->
+					<div style="display: table-row;">
+						<div class="first-column" style="display: table-cell; padding: 0px; width: 20%;">
+							Sustainability
+						</div>
+						<div class="second-column" style="display: table-cell; padding: 0px; width: 20%; text-align: center;">
+							<span id="country1-sustainability">...</span>
+						</div>
+						<div class="third-column" style="display: table-cell; padding: 0px; width: 20%; text-align: center;">
+							<span id="country2-sustainability">...</span>
+						</div>
+					</div>
+					<!-- Row for Regulation & Governance -->
+					<div style="display: table-row;">
+						<div class="first-column" style="display: table-cell; padding: 0px; width: 20%;">
+							Regulation & Governance
+						</div>
+						<div class="second-column" style="display: table-cell; padding: 0px; width: 20%; text-align: center;">
+							<span id="country1-regulationGovernance">...</span>
+						</div>
+						<div class="third-column" style="display: table-cell; padding: 0px; width: 20%; text-align: center;">
+							<span id="country2-regulationGovernance">...</span>
+						</div>
+					</div>
+				</div>        			
 			</div>
 
-			<button onclick="fetchDataAndDrawChart()">Update</button>
 		</div>
 	</div>
-</div>
-
-	<div class="content">
-		<div id="regions_div" style="width: 900px; height: 500px;"></div>
-	</div>
+	
 	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 	<script src="charts-loader.js"></script>
+	<script>
+		$(document).ready(function() {
+		  $('#country1').on('change', handleCountrySelect);
+		  $('#country2').on('change', handleCountrySelect);
+		});
+		
+
+    </script>
 
 </body>
 

@@ -108,7 +108,6 @@
 		
 		google.charts.load('current', {
             'packages': ['geochart'],
-            'mapsApiKey': 'YOUR_MAPS_API_KEY'
         });
         google.charts.setOnLoadCallback(fetchDataAndDrawChart);
 		
@@ -154,20 +153,23 @@
 		
 		
 
-        function drawRegionsMap(serverData) {
-            const dataTable = [['country', 'Index']];
-            for (let entry of serverData) {
-                const country = entry.country;
-                const index = calculateIndex(entry.costs, entry.stability, entry.in_pot, entry.int_coop, entry.governance, entry.env_regul, entry.sust_dev, entry.decarb, entry.risks);
-                const countryName = countryNames[country] || country;
-				dataTable.push([countryName, index]);
-            }
+		function drawRegionsMap(serverData) {
+			const dataTable = [['country', 'Index']];
+			for (let entry of serverData) {
+				const country = entry.country;
+				// Calculate the index and destructure to get the numeric value of the index property
+				const { index } = calculateIndex(entry.costs, entry.stability, entry.in_pot, entry.int_coop, entry.governance, entry.env_regul, entry.sust_dev, entry.decarb, entry.risks);
+				const countryName = countryNames[country] || country;
+				dataTable.push([countryName, index]); // Ensure that index is a number
+			}
 
-            const data = google.visualization.arrayToDataTable(dataTable);
-            const options = {};
-            const chart = new google.visualization.GeoChart(document.getElementById('regions_div'));
-            chart.draw(data, options);
-        }
+			const data = google.visualization.arrayToDataTable(dataTable);
+			const options = {
+				legend: 'none'
+			};
+			const chart = new google.visualization.GeoChart(document.getElementById('regions_div'));
+			chart.draw(data, options);
+		}
 
         function calculateIndex(costs, stability, in_pot, int_coop, governance, env_regul, sust_dev, decarb, risks) {
 			const w_costs = parseFloat(document.getElementById("w_costs").value);
@@ -197,9 +199,16 @@
 			const RegulationGovernance = (w_governance * governance + w_env_regul * env_regul) / (w_governance + w_env_regul);
 			const Sustainability = (w_sust_dev * sust_dev + w_decarb * decarb + w_risks * risks) / (w_sust_dev + w_decarb + w_risks);
 			
-
-            return w_Economy * Economy + w_InnovationCooperation * InnovationCooperation + w_Sustainability * Sustainability + w_RegulationGovernance * RegulationGovernance;
-        }
+			// Create an object with all the sub-indexes and the main index
+			return {
+				index: parseFloat((w_Economy * Economy + w_InnovationCooperation * InnovationCooperation + w_Sustainability * Sustainability + w_RegulationGovernance * RegulationGovernance).toFixed(3)),
+				Economy: parseFloat(Economy.toFixed(3)),
+				InnovationCooperation: parseFloat(InnovationCooperation.toFixed(3)),
+				Sustainability: parseFloat(Sustainability.toFixed(3)),
+				RegulationGovernance: parseFloat(RegulationGovernance.toFixed(3))
+			};
+            
+		}
 
 		function adjustWeights(excludedWeightId) {
 			const total = 1.0;
@@ -239,7 +248,29 @@
 			updateWeightAndRedraw("w_RegulationGovernance", "w_RegulationGovernance_val");
 		}
 
-        function addEventListeners() {
+        
+		        // Function to populate the dropdown menus
+		function populateCountryDropdowns() {
+		  const countrySelect1 = document.getElementById('country1');
+		  const countrySelect2 = document.getElementById('country2');
+
+		  for (const code in countryNames) {
+			const option1 = document.createElement('option');
+			option1.value = code;
+			option1.text = countryNames[code];
+			countrySelect1.add(option1);
+
+			const option2 = document.createElement('option');
+			option2.value = code;
+			option2.text = countryNames[code];
+			countrySelect2.add(option2);
+		  }
+		}
+		
+		document.addEventListener('DOMContentLoaded', populateCountryDropdowns);
+		
+		
+		function addEventListeners() {
 		document.getElementById("w_costs").addEventListener("input", function() {
 			    const complement = 1 - parseFloat(this.value);
 				document.getElementById("w_stability").value = complement.toFixed(2);
@@ -338,6 +369,7 @@
 			valueSpan.innerText = slider.value;
 			if (globalServerData) {
 				drawRegionsMap(globalServerData);
+				handleCountrySelect(); // Updates the comparison results with new weights
 			}
 		}
 		
@@ -356,4 +388,93 @@
 		
 		
 		
+		// Event handler when a country is selected from the dropdown.
+		function handleCountrySelect() {
+			const country1Code = $('#country1').val();
+			const country2Code = $('#country2').val();
+			const country1Name = countryNames[country1Code] || 'Country 1';
+			const country2Name = countryNames[country2Code] || 'Country 2';
+			
+			// Update the labels with the selected country names
+			$('#country1-label').text(`Overall Index for ${country1Name}:`);
+			$('#country2-label').text(`Overall Index for ${country2Name}:`);
+			
+			
+			const country1Data = globalServerData.find(data => data.country === country1Code);
+			const country2Data = globalServerData.find(data => data.country === country2Code);
+
+
+			// Ensure that the data for each country has been found before calculating the index.
+			const result1 = country1Data ? calculateIndexFromData(country1Data) : { index: '...' };
+			const result2 = country2Data ? calculateIndexFromData(country2Data) : { index: '...' };
+
+			// Display the main index results.
+			$('#country1-result').text(result1.index);
+			$('#country2-result').text(result2.index);
+			
+			 // Update the labels for the sub-indexes too
+			$('#country1-economy-label').text(`Economy for ${country1Name}:`);
+			$('#country2-economy-label').text(`Economy for ${country2Name}:`);
+			
+			
+			// Display the sub-indexes
+			$('#country1-economy').text(result1.Economy || '...');
+			$('#country2-economy').text(result2.Economy || '...');
+			$('#country1-innovationCooperation').text(result1.InnovationCooperation || '...');
+			$('#country2-innovationCooperation').text(result2.InnovationCooperation || '...');
+			$('#country1-sustainability').text(result1.Sustainability || '...');
+			$('#country2-sustainability').text(result2.Sustainability || '...');
+			$('#country1-regulationGovernance').text(result1.RegulationGovernance || '...');
+			$('#country2-regulationGovernance').text(result2.RegulationGovernance || '...');
+		}
+		
+		// Calculate the index from a data object.
+		function calculateIndexFromData(data) {
+		  return calculateIndex(
+			data.costs, data.stability, data.in_pot, data.int_coop, data.governance,
+			data.env_regul, data.sust_dev, data.decarb, data.risks
+		  );
+		}
+		
+		// Initialize the dropdowns with Select2 and set up the event handler.
+		$(document).ready(function() {
+		  $('.search-dropdown').select2().on('change', handleCountrySelect);
+		});
+		
+		function resetSliders() {
+			// Select each slider by its ID and reset it to the default value
+			document.getElementById('w_costs').value = '0.5';
+			document.getElementById('w_stability').value = '0.5';
+			document.getElementById('w_sust_dev').value = '0.33';
+			document.getElementById('w_decarb').value = '0.33';
+			document.getElementById('w_risks').value = '0.33';
+			document.getElementById('w_governance').value = '0.5';
+			document.getElementById('w_env_regul').value = '0.5';
+			document.getElementById('w_in_pot').value = '0.5';
+			document.getElementById('w_int_coop').value = '0.5';
+			document.getElementById('w_Economy').value = '0.25';
+			document.getElementById('w_Sustainability').value = '0.25';
+			document.getElementById('w_RegulationGovernance').value = '0.25';
+			document.getElementById('w_InnovationCooperation').value = '0.25';
+
+			// Also update the display values next to each slider
+			document.getElementById('w_costs_val').textContent = '0.5';
+			document.getElementById('w_stability_val').textContent = '0.5';
+			document.getElementById('w_sust_dev_val').textContent = '0.33';
+			document.getElementById('w_decarb_val').textContent = '0.33';
+			document.getElementById('w_risks_val').textContent = '0.33';
+			document.getElementById('w_governance_val').textContent = '0.5';
+			document.getElementById('w_env_regul_val').textContent = '0.5';
+			document.getElementById('w_in_pot_val').textContent = '0.5';
+			document.getElementById('w_int_coop_val').textContent = '0.5';
+			document.getElementById('w_Economy_val').textContent = '0.25';
+			document.getElementById('w_Sustainability_val').textContent = '0.25';
+			document.getElementById('w_RegulationGovernance_val').textContent = '0.25';
+			document.getElementById('w_InnovationCooperation_val').textContent = '0.25';
+			
+			if (globalServerData) {
+				drawRegionsMap(globalServerData); // Redraw the map with the default values
+				handleCountrySelect(); // Update the comparison results with default values
+			}
+		}
         window.onload = addEventListeners;
