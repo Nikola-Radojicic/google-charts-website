@@ -89,7 +89,7 @@
 		  "TH": "Thailand",
 		  "TG": "Togo",
 		  "TN": "Tunisia",
-		  "TR": "Türkiye",
+		  "TR": "Turkey",
 		  "UA": "Ukraine",
 		  "AE": "United Arab Emirates",
 		  "GB": "United Kingdom",
