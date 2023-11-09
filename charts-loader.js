@@ -108,6 +108,7 @@
 		
 		google.charts.load('current', {
             'packages': ['geochart'],
+			'mapsApiKey': 'YOUR_MAPS_API_KEY'
         });
         google.charts.setOnLoadCallback(fetchDataAndDrawChart);
 		
