@@ -69,6 +69,14 @@
 		align-items: center;
 		background: rgba(220 220 220);
 	}
+	
+	#dataset-selector {
+		align-self: flex-start; /* Align the selector to the start (left) */
+		margin-top: 0px; /* Spacing from the top */
+		margin-left: 0px; /* Spacing from the left */
+		width: auto; /* Adjust width as needed */
+		padding-bottom: 0px;
+	}
 
     .content-area {
 		display: flex;
@@ -284,6 +292,11 @@
 	<div class="content-area">
 	
 		<div class="sidebar">
+			<select id="dataset-selector" onchange="changeDataset()">
+			  <option value="https://raw.githubusercontent.com/Nikola-Radojicic/google-charts-website/main/data98.csv">Dataset 98</option>
+			  <option value="https://raw.githubusercontent.com/Nikola-Radojicic/google-charts-website/main/data137.csv">Dataset 137</option>
+			</select>
+
 			
 			<div class="container">
 			
