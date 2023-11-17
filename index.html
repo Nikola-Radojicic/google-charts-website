@@ -14,6 +14,9 @@
 
 	<!-- And then include Select2 JS -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+	
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
 
 
 	
@@ -55,7 +58,7 @@
 		position: sticky;
 		top: 0%;
 		flex-basis: 400px;
-		height: 65vh; /* Height can be adjusted as needed */
+		height: 70vh; /* Height can be adjusted as needed */
 		border: 1px solid #ccc;
 		padding: 10px;
 		box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
@@ -103,7 +106,7 @@
         flex-direction: row;
         gap: 10px;
         width: 100%;
-        align-items: center;
+        align-items: flex-start;
 		flex-shrink: 1;
     }
 
@@ -115,7 +118,6 @@
     }
 
     .column-right {
-        align-self: center;
 		gap: 10px;
     }
 
@@ -133,6 +135,54 @@
 		
     }
 	
+	.slider-group-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+	
+	.info-icon {
+		display: inline-block;
+		width: 15px; /* Size of the icon */
+		height: 15px;
+		line-height: 15px; /* Center the '?' vertically */
+		text-align: center;
+		border-radius: 50%; /* Makes it circular */
+		background-color: #ddd; /* Background color of the icon */
+		cursor: pointer;
+		position: relative;
+		font-size: 12px;
+	}
+
+	.tooltip-text {
+		visibility: hidden;
+		width: 200px;
+		background-color: white;
+		color: black;
+		text-align: left;
+		border-radius: 6px;
+		padding: 5px 0;
+		position: absolute;
+		z-index: 1;
+		bottom: 125%;
+		left: 50%;
+		margin-left: -60px; /* Centers the tooltip */
+		opacity: 0;
+		transition: opacity 0.3s;
+		font-family: Cambria;
+		font-size: 10px;
+	}
+
+	.info-icon:hover .tooltip-text {
+		visibility: visible;
+		opacity: 1;
+		font-family: Cambria;
+		font-size: 10px;		
+	}	
+	
+
+
+	
 	input[type="range"] {
         width: calc(100% - 2px); /* Subtract 2px to account for the border */
         margin: 0 auto; /* Center the slider */
@@ -144,7 +194,8 @@
     .individual-slider {
         display: flex;
         flex-direction: column;
-        gap: 5px;
+        gap: 1px;
+
     }
 	
     label, span {
@@ -209,7 +260,10 @@
 	
 	#country-comparison-output div:nth-child(2) .first-column,
 	#country-comparison-output div:nth-child(2) .second-column,
-	#country-comparison-output div:nth-child(2) .third-column {
+	#country-comparison-output div:nth-child(2) .third-column,
+	#country-comparison-output div:nth-child(2) .fourth-column,
+	#country-comparison-output div:nth-child(2) .fifth-column,
+	#country-comparison-output div:nth-child(2) .sixth-column	{
 		border-bottom: 1px solid #000; /* Adjust color and size as needed */
 	}
 
@@ -279,6 +333,95 @@
 		text-align: left; /* Optional: Align text to the left */
 	}
 	
+	.table-toggle-container {
+		position: relative; /* This makes it the anchor for absolute positioning */
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start; /* Align children to the start */
+	}
+
+    #toggleTableButton {
+        display: block; /* This makes the button take the full width of its container */
+        margin-bottom: 5px; /* Adds some space below the button */
+		width: 195px;
+    }
+
+    #topCountriesTableContainer {
+        display: none; /* Initially hidden */
+		transition: max-height 0.5s ease-out;
+		overflow: hidden; 
+		position: absolute; /* Positioning relative to its nearest positioned ancestor */
+		top: 100%; /* Position it right below the button */
+		left: 0; /* Align it to the left of the container */
+		width: 100%; /* Optional: Set width to match the container */
+		background: white; /* Optional: Set a background color */
+		box-shadow: 0px 0px 0px 0px rgba(0,0,0,0.2); /* Optional: Adds a shadow for better visibility */
+		z-index: 1; /* Ensures it's above other content */
+		font-family: Cambria;
+		font-size: 11.5px;
+	}
+	
+	.slider-label-lock {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		width: 100%;
+		padding-top: 3px;
+	}
+
+	.toggle {
+		width: 40px; /* Width of the toggle */
+		/* Height setting ommited, can be added if needed */
+		border: 1px solid #ccc; /* Border of the toggle */
+		border-radius: 10px; /* Rounded corners */
+		background-color: #f5f5f5; /* Background color */
+		cursor: pointer;
+		
+	}
+
+	.slide {
+		position: relative;
+		height: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: flex-start; /* Start from left */
+		padding-left: 2px; /* Padding from left */
+		transition: justify-content 0.3s; /* Smooth transition for sliding effect */
+	}
+
+	/* Style for the lock icon when the toggle is off */
+	.slide:before {
+		content: "\f023"; /* FontAwesome locked icon */
+		font-family: 'FontAwesome'; /* Use FontAwesome */
+		position: absolute;
+		right: 5px; /* Positioning */
+		color: gray; /* Color of the icon */
+	}	
+	
+	/* Style for the lock icon when the toggle is on */
+	.toggle.active .slide:before {
+		content: "\f09c"; /* FontAwesome unlocked icon */
+		left: 5px; /* Positioning when active */
+	}	
+
+	.slide span {
+		/* Size of the circle icon skipped; done via e.g. font-size: 18px; */
+		z-index: 1;
+	}
+
+	.fa-circle-o {
+		color: gray; /* Color of the circle */
+	}
+
+	/* You can add a class via JavaScript when the toggle is active to slide the circle to the right */
+	.toggle.active .slide {
+		justify-content: flex-end; /* Slide to the right */
+		padding-right: 2px; /* Padding from right */
+	}	
+	
+
+
+	
 
 </style>
 
@@ -290,6 +433,7 @@
 <body>
 
 	<div class="content-area">
+
 	
 		<div class="sidebar">
 			<select id="dataset-selector" onchange="changeDataset()">
@@ -301,11 +445,21 @@
 			<div class="container">
 			
 				<div class="column">
+					<label class="bold-label">Adjust factor weights</label>
 				
 					<!-- Group for Economy -->
 					<div class="slider-group">
-						<label class="bold-label">Economy:</label>
-						
+						<div class="slider-group-header">
+							<label class="bold-label">Economy:</label>
+							<div class="info-icon">
+								?
+								<span class="tooltip-text">
+									<u>Indicators included:</u><br>
+									<strong>costs:</strong> LCOE, distance<br>
+									<strong>stability:</strong> inflation, LPI
+								</span>						
+							</div>
+						</div>						
 						<!-- Slider for costs -->
 						<div class="individual-slider">
 							<label for="w_costs">costs:  <span id="w_costs_val">0.5</span></label>
@@ -321,26 +475,57 @@
 					
 					<!-- Group for Sustainability -->
 					<div class="slider-group">
-						<label class="bold-label">Sustainability:</label>
-						
+						<div class="slider-group-header">
+							<label class="bold-label">Sustainability:</label>
+							<div class="info-icon">
+								?
+								<span class="tooltip-text">
+									<u>Indicators included:</u><br>
+									<strong>development:</strong> Access to electricity, Access to clean cooking fuels<br>
+									<strong>decarbonization:</strong> Fossil fuels in the electricity mix, CO2 emissions from electricity & heat prod.,Installed RE electricity generation capacity<br>
+									<strong>risks:</strong> water use restrictions, exposure to natural hazards
+								</span>						
+							</div>
+						</div>								
 						<!-- Slider for sust_dev -->
 						<div class="individual-slider">
-							<label for="w_sust_dev">development: <span id="w_sust_dev_val">0.33</span></label>
-							<input type="range" min="0" max="1" step="0.01" value="0.33" id="w_sust_dev">
+							<div class="slider-label-lock">
+								<label for="w_sust_dev"><strong>development: </strong><span id="w_sust_dev_val">.33̅</span></label>
+								<div class='toggle' id='lock_w_sust_dev' onclick="toggleLock('w_sust_dev')">
+									<div class='slide'>
+										<span class='fa fa-circle-o'></span>
+									</div>
+								</div>
+							</div>							
+							<input type="range" min="0" max="1" step="0.01" value="0.33333333333" id="w_sust_dev">
 							
 						</div>
 
 						<!-- Slider for decarb -->
 						<div class="individual-slider">
-							<label for="w_decarb">decarbonisation: <span id="w_decarb_val">0.33</span></label>
-							<input type="range" min="0" max="1" step="0.01" value="0.33" id="w_decarb">
+							<div class="slider-label-lock">
+								<label for="w_decarb"><strong>decarbonisation: </strong><span id="w_decarb_val">.33̅</span></label>
+								<div class='toggle' id='lock_w_decarb' onclick="toggleLock('w_decarb')">
+									<div class='slide'>
+										<span class='fa fa-circle-o'></span>
+									</div>
+								</div>
+							</div>							
+							<input type="range" min="0" max="1" step="0.01" value="0.33333333333" id="w_decarb">
 							
 						</div>
 
 						<!-- Slider for risks -->
 						<div class="individual-slider">
-							<label for="w_risks">risks: <span id="w_risks_val">0.33</span></label>
-							<input type="range" min="0" max="1" step="0.01" value="0.33" id="w_risks">
+							<div class="slider-label-lock">
+								<label for="w_risks"><strong>risks: </strong><span id="w_risks_val">.33̅</span></label>
+								<div class='toggle' id='lock_w_risks' onclick="toggleLock('w_risks')">
+									<div class='slide'>
+										<span class='fa fa-circle-o'></span>
+									</div>
+								</div>
+							</div>						
+							<input type="range" min="0" max="1" step="0.01" value="0.33333333333" id="w_risks">
 							
 						</div>
 					</div>
@@ -348,7 +533,17 @@
 					
 					<!-- Group for Regulation & Governance -->
 					<div class="slider-group">
-						<label class="bold-label">Regulation & Governance:</label>
+						<div class="slider-group-header">
+							<label class="bold-label">Regulation & Governance::</label>
+							<div class="info-icon">
+								?
+								<span class="tooltip-text">
+									<u>Indicators included:</u><br>
+									<strong>governance:</strong> quality of governance, open markets, regulatory efficiency, labour rights<br>
+									<strong>env. regulation:</strong> RE regulation, env. assessment laws<br>
+								</span>						
+							</div>
+						</div>	
 				
 						<!-- Slider for governance -->
 						<div class="individual-slider">
@@ -368,7 +563,18 @@
 					
 					<!-- Group for Innovation & Cooperation -->
 					<div class="slider-group">
-						<label class="bold-label">Innovation & Cooperation:</label>
+						<div class="slider-group-header">
+							<label class="bold-label">Innovation & Cooperation:</label>
+							<div class="info-icon">
+								?
+								<span class="tooltip-text">
+									<u>Indicators included:</u><br>
+									<strong>innovation potential:</strong> RE innovation activity, human capital, innovation capacity, H2 innovation<br>
+									<strong>int. cooperation:</strong> energy partnership w/ Germany, H2 trade w/ Germany, energy cooperation w/ the EU<br>
+								</span>						
+							</div>
+						</div>	
+
 						
 						<!-- Slider for in_pot -->
 						<div class="individual-slider">
@@ -387,39 +593,72 @@
 				</div>
 
 				<div class="column column-right">
+					<label class="bold-label">Adjust dimension weights</label>
 					<div class="slider-group">
 						<!-- Sliders for the factors themselves -->
 						<div class="individual-slider">
-							<label for="w_Economy"><strong>Economy: </strong><span id="w_Economy_val">0.25</span></label>
-							<input type="range" min="0" max="1" step="0.01" value="0.25" id="w_Economy">
-							
+							<div class="slider-label-lock">
+								<label for="w_Economy"><strong>Economy: </strong><span id="w_Economy_val">0.25</span></label>
+								<div class='toggle' id='lock_w_Economy' onclick="toggleLock('w_Economy')">
+									<div class='slide'>
+										<span class='fa fa-circle-o'></span>
+									</div>
+								</div>
+							</div>
+							<input type="range" min="0" max="1" step="0.01" value="0.25" id="w_Economy">							
 						</div>
 						
 						<div class="individual-slider">
-							<label for="w_Sustainability"><strong>Sustainability: </strong><span id="w_Sustainability_val">0.25</span></label>
+							<div class="slider-label-lock">
+								<label for="w_Sustainability"><strong>Sustainability: </strong><span id="w_Sustainability_val">0.25</span></label>
+								<div class='toggle'id='lock_w_Sustainability' onclick="toggleLock('w_Sustainability')">
+									<div class='slide'>
+										<span class='fa fa-circle-o'></span>
+									</div>
+								</div>
+							</div>
 							<input type="range" min="0" max="1" step="0.01" value="0.25" id="w_Sustainability">
 							
 						</div>		
 						
 						<div class="individual-slider">
-							<label for="w_RegulationGovernance"><strong>Regulation & Governance: </strong><span id="w_RegulationGovernance_val">0.25</span></label>
+							<div class="slider-label-lock">
+								<label for="w_RegulationGovernance"><strong>Regulation & Governance: </strong><span id="w_RegulationGovernance_val">0.25</span></label>
+								<div class='toggle'id='lock_w_RegulationGovernance' onclick="toggleLock('w_RegulationGovernance')">
+									<div class='slide'>
+										<span class='fa fa-circle-o'></span>
+									</div>
+								</div>
+							</div>
 							<input type="range" min="0" max="1" step="0.01" value="0.25" id="w_RegulationGovernance">
 							
 						</div>			
 						
 						<div class="individual-slider">
-							<label for="w_InnovationCooperation"><strong>Innovation & Cooperation: </strong><span id="w_InnovationCooperation_val">0.25</span></label>
+							<div class="slider-label-lock">
+								<label for="w_InnovationCooperation"><strong>Innovation & Cooperation: </strong><span id="w_InnovationCooperation_val">0.25</span></label>
+								<div class='toggle'id='lock_w_InnovationCooperation' onclick="toggleLock('w_InnovationCooperation')">
+									<div class='slide'>
+										<span class='fa fa-circle-o'></span>
+									</div>
+								</div>
+							</div>
 							<input type="range" min="0" max="1" step="0.01" value="0.25" id="w_InnovationCooperation">
 							
 						</div>						
 					</div>
-					<button onclick="resetSliders()">Reset</button>
+					<button onclick="resetSliders()">Reset weights</button>
+					<div class="table-toggle-container">
+						<button id="toggleTableButton">Show|Hide top 10 countries</button>
+						<div id="topCountriesTableContainer" style="display: none;"></div>
+					</div>					
 				</div>
-
-			
 			</div>
-			
 		</div>
+
+
+
+		
 		<div class="main-content">
 			<div class="title-container">
 				<a href="https://www.example.com" target="_blank">
@@ -429,21 +668,30 @@
 			<a href="https://www.tu-darmstadt.de/clean-circles/about_cc/index.de.jsp" target="_blank" id="logo-link"style="color: transparent;">		
 				<img src="https://raw.githubusercontent.com/Nikola-Radojicic/google-charts-website/main/Clean_Circles_Logo.jpg" alt="Logo" id="logo" />
 			</a>
-			<div id="regions_div" style="width: 900px; height: 700px;"></div>
-
-
-
 			
+		
+			<div id="regions_div" class="custom-chart-container" style="width: 900px; height: 700px;"></div>
+		
 			
 			<div class="comparison-container">
 				<!-- Country Comparison Output -->
 				<div id="country-comparison-output" style="display: table; width: 50%; margin-top: 5px;">
 					<!-- Row for dropdowns -->
 					<div style="display: table-row;">
-						<div class="first-column" style="display: table-cell;width: 30%;"> <!-- Empty cell for alignment -->
-							<span style="font-family: Cambria, sans-serif; font-size: 12px;">Country Comparison</span>
-						</div>
-						<div class="second-column" style="display: table-cell;width: 30%;">
+						
+						<div class="first-column" style="display: table-cell;width: 100%;"> <!-- Cell for alignment -->
+							<span style="font-family: Cambria; font-size: 12px;">Compare </span>
+							<!-- Dropdown for selecting the number of columns -->
+							<select id="column-selector" style="width: auto; min-width: 30px;">
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+							</select>
+							<span style="font-family: Cambria; font-size: 12px;"> countries</span>
+						</div>						
+
+						<div class="second-column" style="display: table-cell;width: 100%;">
 							<!-- First country dropdown -->
 							<div class="country-dropdown" style="text-align: center">
 								<select id="country1" class="search-dropdown" style="width: 100%;">
@@ -452,7 +700,7 @@
 								</select>
 							</div>
 						</div>
-						<div class="third-column" style="display: table-cell;width: 30%;">
+						<div class="third-column" style="display: table-cell;width: 100%;">
 							<!-- Second country dropdown -->
 							<div class="country-dropdown" style="text-align: center">
 								<select id="country2" class="search-dropdown" style="width: 100%;">
@@ -461,67 +709,141 @@
 								</select>
 							</div>
 						</div>
+						<div class="fourth-column" style="display: table-cell;width: 100%;">
+							<!-- First country dropdown -->
+							<div class="country-dropdown" style="text-align: center">
+								<select id="country3" class="search-dropdown" style="width: 100%;">
+								<option value="" selected disabled>Select Country</option>
+								  <!-- Options will be populated by JavaScript -->
+								</select>
+							</div>
+						</div>
+						<div class="fifth-column" style="display: table-cell;width: 100%;">
+							<!-- Second country dropdown -->
+							<div class="country-dropdown" style="text-align: center">
+								<select id="country4" class="search-dropdown" style="width: 100%;">
+								<option value="" selected disabled>Select Country</option>
+								  <!-- Options will be populated by JavaScript -->
+								</select>
+							</div>
+						</div>
+						<div class="sixth-column" style="display: table-cell;width: 100%;">
+							<!-- Second country dropdown -->
+							<div class="country-dropdown" style="text-align: center">
+								<select id="country5" class="search-dropdown" style="width: 100%;">
+								<option value="" selected disabled>Select Country</option>
+								  <!-- Options will be populated by JavaScript -->
+								</select>
+							</div>
+						</div>
+						
 					</div>
 					<!-- Row for Overall index -->
 					<div style="display: table-row;">
-						<div class="first-column" style="display: table-cell; padding: 0px; width: 30%;">
+						<div class="first-column" style="display: table-cell; padding: 0px; width: 100%;">
 							Overall index
 						</div>
-						<div class="second-column" style="display: table-cell; padding: 0px; width: 20%; text-align: center;">
+						<div class="second-column" style="display: table-cell; padding: 0px; width: 100%; text-align: center;">
 							<span id="country1-result">...</span>
 						</div>
-						<div class="third-column" style="display: table-cell; padding: 0px; width: 20%; text-align: center;">
+						<div class="third-column" style="display: table-cell; padding: 0px; width: 100%; text-align: center;">
 							<span id="country2-result">...</span>
 						</div>
+						<div class="fourth-column" style="display: table-cell; padding: 0px; width: 100%; text-align: center;">
+							<span id="country3-result">...</span>
+						</div>
+						<div class="fifth-column" style="display: table-cell; padding: 0px; width: 100%; text-align: center;">
+							<span id="country4-result">...</span>
+						</div>
+						<div class="sixth-column" style="display: table-cell; padding: 0px; width: 100%; text-align: center;">
+							<span id="country5-result">...</span>
+						</div>						
 					</div>
 					<!-- ...other rows follow in the same pattern... -->
 					<!-- Row for Economy -->
 					<div style="display: table-row;">
-						<div class="first-column" style="display: table-cell; padding: 0px; width: 20%;">
+						<div class="first-column" style="display: table-cell; padding: 0px; width: 100%;">
 							Economy
 						</div>
-						<div class="second-column" style="display: table-cell; padding: 0px; width: 20%; text-align: center;">
+						<div class="second-column" style="display: table-cell; padding: 0px; width: 100%; text-align: center;">
 							<span id="country1-economy">...</span>
 						</div>
-						<div class="third-column" style="display: table-cell; padding: 0px; width: 20%; text-align: center;">
+						<div class="third-column" style="display: table-cell; padding: 0px; width: 100%; text-align: center;">
 							<span id="country2-economy">...</span>
 						</div>
+						<div class="fourth-column" style="display: table-cell; padding: 0px; width: 100%; text-align: center;">
+							<span id="country3-economy">...</span>
+						</div>
+						<div class="fifth-column" style="display: table-cell; padding: 0px; width: 100%; text-align: center;">
+							<span id="country4-economy">...</span>
+						</div>
+						<div class="sixth-column" style="display: table-cell; padding: 0px; width: 100%; text-align: center;">
+							<span id="country5-economy">...</span>
+						</div>
+						
 					</div>
 					<!-- Row for Innovation & Cooperation -->
 					<div style="display: table-row;">
-						<div class="first-column" style="display: table-cell; padding: 0px; width: 20%;">
+						<div class="first-column" style="display: table-cell; padding: 0px; width: 100%;">
 							Innovation & Cooperation
 						</div>
-						<div class="second-column" style="display: table-cell; padding: 0px; width: 20%; text-align: center;">
+						<div class="second-column" style="display: table-cell; padding: 0px; width: 100%; text-align: center;">
 							<span id="country1-innovationCooperation">...</span>
 						</div>
-						<div class="third-column" style="display: table-cell; padding: 0px; width: 20%; text-align: center;">
+						<div class="third-column" style="display: table-cell; padding: 0px; width: 100%; text-align: center;">
 							<span id="country2-innovationCooperation">...</span>
 						</div>
+						<div class="fourth-column" style="display: table-cell; padding: 0px; width: 100%; text-align: center;">
+							<span id="country3-innovationCooperation">...</span>
+						</div>
+						<div class="fifth-column" style="display: table-cell; padding: 0px; width: 100%; text-align: center;">
+							<span id="country4-innovationCooperation">...</span>
+						</div>
+						<div class="sixth-column" style="display: table-cell; padding: 0px; width: 100%; text-align: center;">
+							<span id="country5-innovationCooperation">...</span>
+						</div>						
 					</div>
 					<!-- Row for Sustainability -->
 					<div style="display: table-row;">
-						<div class="first-column" style="display: table-cell; padding: 0px; width: 20%;">
+						<div class="first-column" style="display: table-cell; padding: 0px; width: 100%;">
 							Sustainability
 						</div>
-						<div class="second-column" style="display: table-cell; padding: 0px; width: 20%; text-align: center;">
+						<div class="second-column" style="display: table-cell; padding: 0px; width: 100%; text-align: center;">
 							<span id="country1-sustainability">...</span>
 						</div>
-						<div class="third-column" style="display: table-cell; padding: 0px; width: 20%; text-align: center;">
+						<div class="third-column" style="display: table-cell; padding: 0px; width: 100%; text-align: center;">
 							<span id="country2-sustainability">...</span>
 						</div>
+						<div class="fourth-column" style="display: table-cell; padding: 0px; width: 100%; text-align: center;">
+							<span id="country3-sustainability">...</span>
+						</div>
+						<div class="fifth-column" style="display: table-cell; padding: 0px; width: 100%; text-align: center;">
+							<span id="country4-sustainability">...</span>
+						</div>
+						<div class="sixth-column" style="display: table-cell; padding: 0px; width: 100%; text-align: center;">
+							<span id="country5-sustainability">...</span>
+						</div>						
 					</div>
 					<!-- Row for Regulation & Governance -->
 					<div style="display: table-row;">
-						<div class="first-column" style="display: table-cell; padding: 0px; width: 20%;">
+						<div class="first-column" style="display: table-cell; padding: 0px; width: 100%;">
 							Regulation & Governance
 						</div>
-						<div class="second-column" style="display: table-cell; padding: 0px; width: 20%; text-align: center;">
+						<div class="second-column" style="display: table-cell; padding: 0px; width: 100%; text-align: center;">
 							<span id="country1-regulationGovernance">...</span>
 						</div>
-						<div class="third-column" style="display: table-cell; padding: 0px; width: 20%; text-align: center;">
+						<div class="third-column" style="display: table-cell; padding: 0px; width: 100%; text-align: center;">
 							<span id="country2-regulationGovernance">...</span>
 						</div>
+						<div class="fourth-column" style="display: table-cell; padding: 0px; width: 100%; text-align: center;">
+							<span id="country3-regulationGovernance">...</span>
+						</div>
+						<div class="fifth-column" style="display: table-cell; padding: 0px; width: 100%; text-align: center;">
+							<span id="country4-regulationGovernance">...</span>
+						</div>
+						<div class="sixth-column" style="display: table-cell; padding: 0px; width: 100%; text-align: center;">
+							<span id="country5-regulationGovernance">...</span>
+						</div>						
 					</div>
 				</div>        			
 			</div>
@@ -535,6 +857,9 @@
 		$(document).ready(function() {
 		  $('#country1').on('change', handleCountrySelect);
 		  $('#country2').on('change', handleCountrySelect);
+		  $('#country3').on('change', handleCountrySelect);
+		  $('#country4').on('change', handleCountrySelect);
+		  $('#country5').on('change', handleCountrySelect);
 		});
 		
 
