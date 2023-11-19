@@ -1,10 +1,12 @@
         // defining country names w/o using Google API map keys
 		
+		let currentSelectedContinent = 'all'; // Default to 'all' for the world view
+		
 		const countryNames = {
 		  "AL": "Albania",
 		  "DZ": "Algeria",
 		  "AO": "Angola",
-		  "AG": "Antigua & Barbuda",
+		  "AG": "Antigua and Barbuda",
 		  "AR": "Argentina",
 		  "AU": "Australia",
 		  "BS": "Bahamas",
@@ -12,7 +14,7 @@
 		  "BD": "Bangladesh",
 		  "BB": "Barbados",
 		  "BE": "Belgium",
-		  "BA": "Bosnia & Herzegovina",
+		  "BA": "Bosnia and Herzegovina",
 		  "BR": "Brazil",
 		  "BZ": "Belize",
 		  "SB": "Solomon Islands",
@@ -97,7 +99,7 @@
 		  "NI": "Nicaragua",
 		  "NG": "Nigeria",
 		  "NO": "Norway",
-		  "FM": "Micronesia (Federated States of)",
+		  "FM": "Federated States of Micronesia",
 		  "PK": "Pakistan",
 		  "PA": "Panama",
 		  "PG": "Papua New Guinea",
@@ -109,8 +111,8 @@
 		  "QA": "Qatar",
 		  "RO": "Romania",
 		  "RU": "Russia",
-		  "LC": "St. Lucia",
-		  "VC": "St. Vincent & Grenadines",
+		  "LC": "Saint Lucia",
+		  "VC": "Saint Vincent and the Grenadines",
 		  "SA": "Saudi Arabia",
 		  "SN": "Senegal",
 		  "SL": "Sierra Leone",
@@ -126,7 +128,7 @@
 		  "SY": "Syria",
 		  "TH": "Thailand",
 		  "TG": "Togo",
-		  "TT": "Trinidad & Tobago",
+		  "TT": "Trinidad and Tobago",
 		  "AE": "United Arab Emirates",
 		  "TN": "Tunisia",
 		  "TR": "Turkey",
@@ -142,7 +144,146 @@
 		};
 		
 		
-		
+		const countryContinents = {
+		  "AL": "Europe",
+		  "DZ": "Africa",
+		  "AO": "Africa",
+		  "AG": "Caribbean",
+		  "AR": "South America",
+		  "AU": "Oceania",
+		  "BS": "Caribbean",
+		  "BH": "Asia",
+		  "BD": "Asia",
+		  "BB": "Caribbean",
+		  "BE": "Europe",
+		  "BA": "Europe",
+		  "BR": "South America",
+		  "BZ": "Central America",
+		  "SB": "Oceania",
+		  "VG": "Caribbean",
+		  "BN": "Asia",
+		  "BG": "Europe",
+		  "MM": "Asia",
+		  "KH": "Asia",
+		  "CM": "Africa",
+		  "CA": "North America",
+		  "CV": "Africa",
+		  "LK": "Asia",
+		  "CL": "South America",
+		  "CN": "Asia",
+		  "TW": "Asia",
+		  "CO": "South America",
+		  "CG": "Africa",
+		  "CD": "Africa",
+		  "CR": "Central America",
+		  "HR": "Europe",
+		  "CU": "Caribbean",
+		  "CY": "Europe",
+		  "BJ": "Africa",
+		  "DK": "Europe",
+		  "DO": "Caribbean",
+		  "EC": "South America",
+		  "GQ": "Africa",
+		  "ER": "Africa",
+		  "EE": "Europe",
+		  "FJ": "Oceania",
+		  "FI": "Europe",
+		  "FR": "Europe",
+		  "DJ": "Africa",
+		  "GA": "Africa",
+		  "GE": "Europe",
+		  "GH": "Africa",
+		  "GR": "Europe",
+		  "GL": "Europe",
+		  "GD": "Caribbean",
+		  "GT": "Central America",
+		  "GN": "Africa",
+		  "GY": "South America",
+		  "HT": "Caribbean",
+		  "HN": "Central America",
+		  "HK": "Asia",
+		  "IS": "Europe",
+		  "IN": "Asia",
+		  "ID": "Asia",
+		  "IR": "Asia",
+		  "IQ": "Asia",
+		  "IE": "Europe",
+		  "IL": "Asia",
+		  "IT": "Europe",
+		  "CI": "Africa",
+		  "JM": "Caribbean",
+		  "JP": "Asia",
+		  "KE": "Africa",
+		  "KP": "Asia",
+		  "KR": "Asia",
+		  "KW": "Asia",
+		  "LB": "Asia",
+		  "LV": "Europe",
+		  "LR": "Africa",
+		  "LY": "Africa",
+		  "LT": "Europe",
+		  "MO": "Asia",
+		  "MG": "Africa",
+		  "MY": "Asia",
+		  "MT": "Europe",
+		  "MR": "Africa",
+		  "MU": "Africa",
+		  "MX": "Central America",
+		  "ME": "Europe",
+		  "MA": "Africa",
+		  "MZ": "Africa",
+		  "OM": "Asia",
+		  "NA": "Africa",
+		  "NL": "Europe",
+		  "CW": "Caribbean",
+		  "VU": "Oceania",
+		  "NZ": "Oceania",
+		  "NI": "Central America",
+		  "NG": "Africa",
+		  "NO": "Europe",
+		  "FM": "Oceania",
+		  "PK": "Asia",
+		  "PA": "Central America",
+		  "PG": "Asia",
+		  "PE": "South America",
+		  "PH": "Asia",
+		  "PL": "Europe",
+		  "PT": "Europe",
+		  "TL": "Asia",
+		  "QA": "Asia",
+		  "RO": "Europe",
+		  "RU": "Europe",
+		  "LC": "Caribbean",
+		  "VC": "Caribbean",
+		  "SA": "Asia",
+		  "SN": "Africa",
+		  "SL": "Africa",
+		  "SG": "Asia",
+		  "VN": "Asia",
+		  "SI": "Europe",
+		  "SO": "Africa",
+		  "ZA": "Africa",
+		  "ES": "Europe",
+		  "SD": "Africa",
+		  "SR": "South America",
+		  "SE": "Europe",
+		  "SY": "Asia",
+		  "TH": "Asia",
+		  "TG": "Africa",
+		  "TT": "Caribbean",
+		  "AE": "Asia",
+		  "TN": "Africa",
+		  "TR": "Europe",
+		  "UA": "Europe",
+		  "EG": "Africa",
+		  "GB": "Europe",
+		  "TZ": "Africa",
+		  "US": "North America",
+		  "UY": "South America",
+		  "VE": "South America",
+		  "YE": "Asia",
+		  "DE": "Europe"
+		};		
 		
 		
 		
@@ -158,6 +299,13 @@
 			fetchDataAndDrawChart(selectedDataset);
 		}
 		
+		function changeContinent() {
+			const selectedContinent = document.getElementById("continent-selector").value;
+			currentSelectedContinent = selectedContinent; // Update the global variable
+			drawRegionsMap(globalServerData, selectedContinent);
+		}
+		
+		
         function fetchDataAndDrawChart(url) {
             fetch(url)
 				.then(response => {
@@ -169,7 +317,7 @@
 				.then(text => {
 					const data = parseCSV(text);
 					globalServerData = data;
-					drawRegionsMap(data);
+					drawRegionsMap(data, currentSelectedContinent);
 					drawTopCountriesTable();
 				})
 				.catch(error => {
@@ -201,23 +349,45 @@
 		
 		
 
-		function drawRegionsMap(serverData) {
+		function drawRegionsMap(serverData, selectedContinent = 'all') {
 			const dataTable = [['country', 'Index']];
 			for (let entry of serverData) {
 				const country = entry.country;
-				// Calculate the index and destructure to get the numeric value of the index property
-				const { index } = calculateIndex(entry.costs, entry.stability, entry.in_pot, entry.int_coop, entry.governance, entry.env_regul, entry.sust_dev, entry.decarb, entry.risks);
-				const countryName = countryNames[country] || country;
-				dataTable.push([countryName, index]); // Ensure that index is a number
+				// Only add data for countries in the selected continent (or all continents)
+				if (selectedContinent === 'all' || countryContinents[country] === selectedContinent) {
+					const { index } = calculateIndex(entry.costs, entry.stability, entry.in_pot, entry.int_coop, entry.governance, entry.env_regul, entry.sust_dev, entry.decarb, entry.risks);
+					const countryName = countryNames[country] || country;
+					dataTable.push([countryName, index]); // Ensure that index is a number
+				}
 			}
 
 			const data = google.visualization.arrayToDataTable(dataTable);
+
+			// Map options - focus on the selected continent
+			let regionCode;
+			switch (selectedContinent) {
+				case 'Africa': regionCode = '002'; break;
+				case 'Asia': regionCode = '142'; break;
+				case 'Europe': regionCode = '150'; break;
+				case 'North America': regionCode = '021'; break; // Northern America
+				case 'South America': regionCode = '005'; break;
+				case 'Central America': regionCode = '013'; break;	
+				case 'Caribbean': regionCode = '029'; break;	
+				case 'Oceania': regionCode = '009'; break;
+				default: regionCode = 'world'; break;
+			}
+
 			const options = {
-				legend: 'none'
+				legend: 'none',
+				region: regionCode, // Set the region based on the selected continent
+				displayMode: 'regions',
+				resolution: 'countries',
 			};
+
 			const chart = new google.visualization.GeoChart(document.getElementById('regions_div'));
 			chart.draw(data, options);
-		}	
+		}
+	
 		
 
 
@@ -321,47 +491,40 @@
 				}
 			});
 
-			// If all but one sliders are locked, set the last slider to the remaining value and prevent further adjustments
 			if (unlockedCount === 1 && lastUnlockedId === excludedWeightId) {
 				let remainingWeight = 1 - lockedTotalWeight;
 				excludedSlider.value = remainingWeight.toFixed(2);
 				document.getElementById(excludedWeightId + "_val").textContent = remainingWeight.toFixed(2);
-				return; // Exit the function as no more adjustments are needed
-			}
-
-			// Update the value display for the excluded slider
-			document.getElementById(excludedWeightId + "_val").textContent = excludedWeight.toFixed(2);
-
-			// Calculate the maximum value the current slider can have
-			let maxExcludedValue = 1 - lockedTotalWeight;
-			if (excludedWeight > maxExcludedValue) {
-				excludedSlider.value = maxExcludedValue.toFixed(2);
-				excludedWeight = maxExcludedValue;
-				// Update the value display again if the value was adjusted
-				document.getElementById(excludedWeightId + "_val").textContent = maxExcludedValue.toFixed(2);
-			}
-
-			// The remaining weight available for unlocked sliders
-			let availableWeight = 1 - lockedTotalWeight - excludedWeight;
-
-			// Calculate the number of unlocked sliders, excluding the current one
-			let countUnlocked = ["w_Economy", "w_InnovationCooperation", "w_Sustainability", "w_RegulationGovernance"].filter(id => !lockStatus[id] && id !== excludedWeightId).length;
-
-			// Divide the available weight equally among the unlocked sliders
-			let newWeight = availableWeight / countUnlocked;
-
-			// Set new weights for unlocked sliders and update their displayed values
-			["w_Economy", "w_InnovationCooperation", "w_Sustainability", "w_RegulationGovernance"].forEach(id => {
-				if (!lockStatus[id] && id !== excludedWeightId) {
-					const slider = document.getElementById(id);
-					slider.value = newWeight.toFixed(2);
-					document.getElementById(id + "_val").textContent = newWeight.toFixed(2);
+			} else {
+				document.getElementById(excludedWeightId + "_val").textContent = excludedWeight.toFixed(2);
+				let maxExcludedValue = 1 - lockedTotalWeight;
+				if (excludedWeight > maxExcludedValue) {
+					excludedSlider.value = maxExcludedValue.toFixed(2);
+					excludedWeight = maxExcludedValue;
+					document.getElementById(excludedWeightId + "_val").textContent = maxExcludedValue.toFixed(2);
 				}
-			});
 
-			// Ensure the excluded slider is set to its current value
-			excludedSlider.value = excludedWeight.toFixed(2);
+				let availableWeight = 1 - lockedTotalWeight - excludedWeight;
+				let countUnlocked = ["w_Economy", "w_InnovationCooperation", "w_Sustainability", "w_RegulationGovernance"].filter(id => !lockStatus[id] && id !== excludedWeightId).length;
+				let newWeight = availableWeight / countUnlocked;
+
+				["w_Economy", "w_InnovationCooperation", "w_Sustainability", "w_RegulationGovernance"].forEach(id => {
+					if (!lockStatus[id] && id !== excludedWeightId) {
+						const slider = document.getElementById(id);
+						slider.value = newWeight.toFixed(2);
+						document.getElementById(id + "_val").textContent = newWeight.toFixed(2);
+					}
+				});
+
+				excludedSlider.value = excludedWeight.toFixed(2);
+			}
+
+			// Redraw the map with the current continent
+			if (globalServerData) {
+				drawRegionsMap(globalServerData, currentSelectedContinent);
+			}
 		}
+
 
 		
 		function adjustSubWeights(changedId, otherIds) {
@@ -583,7 +746,7 @@
 				// Redraw chart and update display
 				updateWeightAndRedraw(sliderId, sliderId + "_val");
 				otherIds.forEach(id => updateWeightAndRedraw(id, id + "_val"));
-				drawRegionsMap(globalServerData);
+				drawRegionsMap(globalServerData,currentSelectedContinent);
 				drawTopCountriesTable();
 				handleCountrySelect();
 			});
@@ -614,11 +777,12 @@
 			const valueSpan = document.getElementById(valueId);
 			valueSpan.innerText = slider.value;
 			if (globalServerData) {
-				drawRegionsMap(globalServerData);
+				drawRegionsMap(globalServerData, currentSelectedContinent); // Pass the selected continent
 				handleCountrySelect(); // Updates the comparison results with new weights
 			}
 			drawTopCountriesTable();
 		}
+
 		
 		document.addEventListener("DOMContentLoaded", function() {
 			document.querySelectorAll('input[type="range"]').forEach((input) => {
@@ -846,7 +1010,7 @@
 			document.getElementById('w_InnovationCooperation_val').textContent = '0.25';
 			
 			if (globalServerData) {
-				drawRegionsMap(globalServerData); // Redraw the map with the default values
+				drawRegionsMap(globalServerData, currentSelectedContinent); // Redraw the map with the default values
 				handleCountrySelect(); // Update the comparison results with default values
 			}
 			

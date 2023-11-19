@@ -34,7 +34,7 @@
 		text-align: center; /* Center the text horizontally */
 		padding: 0px 0; /* Add some padding inside the title container */
 		z-index: 100; /* Ensure it's above other content */
-		background: #FFF; /* Optional: Set a background if you need it to stand out over the map */
+		background-color: rgb(244, 244, 244); /* Optional: Set a background if you need it to stand out over the map */
 		font-family: Cambria;
 		color: #000;
 		font-size: 1.5vh;
@@ -88,6 +88,7 @@
 		height: 100%;        /* Full height of the viewport */
 		width: 100%;            /* Full width of the viewport */
 		overflow: auto;
+		background-color: rgb(244, 244, 244);
     }
 
     body, html {
@@ -223,7 +224,8 @@
 		max-height: calc(100vh - 5vh);
 		margin-top: 5vh;
 		position: relative; /* if not already positioned */
-		z-index: 20; /* Higher z-index to be above the logo */
+		z-index: 20; /* Higher z-index to be above the logo */	
+		box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
 	}
 	
 	
@@ -417,6 +419,12 @@
 	.toggle.active .slide {
 		justify-content: flex-end; /* Slide to the right */
 		padding-right: 2px; /* Padding from right */
+	}	
+	
+	.selector-container {
+		display: flex;
+		flex-direction: column;
+		padding-left: 3px;
 	}	
 	
 
@@ -656,6 +664,22 @@
 			</div>
 		</div>
 
+		
+		<div class="selector-container">
+			<label for="continent-selector" class = "bold-label"; style="font-size: 12px; font-family: Cambria;">Select region</label>
+			<select id="continent-selector" onchange="changeContinent()">
+				<option value="all">World</option>
+				<option value="Africa">Africa</option>
+				<option value="Asia">Asia</option>
+				<option value="Europe">Europe</option>
+				<option value="North America">North America</option>
+				<option value="South America">South America</option>
+				<option value="Central America">Central America</option>
+				<option value="Caribbean">Caribbean</option>
+				<option value="Oceania">Australia & Oceania</option>
+			</select>
+		</div>
+
 
 
 		
@@ -671,7 +695,9 @@
 			
 		
 			<div id="regions_div" class="custom-chart-container" style="width: 900px; height: 700px;"></div>
-		
+			<div id="tooltip" style="position: absolute; display: none; background: white; border: 1px solid black; padding: 5px; border-radius: 5px; pointer-events: none; z-index: 1000;">
+				<!-- Tooltip content will be dynamically updated -->
+			</div>		
 			
 			<div class="comparison-container">
 				<!-- Country Comparison Output -->
