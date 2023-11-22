@@ -427,6 +427,15 @@
 		padding-left: 3px;
 	}	
 	
+	.sidebar-title-container {
+		background-color: rgb(244, 244, 244); /* Example background color */
+		padding-left: 5px; /* Example padding */
+		text-align: center; /* Center the text inside the container */
+		/* Add more styling as needed */
+		text-align: left;
+		border: 1px solid black; /* Add a black border */
+		margin-bottom: 5px;
+	}
 
 
 	
@@ -441,229 +450,237 @@
 <body>
 
 	<div class="content-area">
-
 	
-		<div class="sidebar">
-			<select id="dataset-selector" onchange="changeDataset()">
-			  <option value="https://raw.githubusercontent.com/Nikola-Radojicic/google-charts-website/main/data98.csv">Dataset 98</option>
-			  <option value="https://raw.githubusercontent.com/Nikola-Radojicic/google-charts-website/main/data137.csv">Dataset 137</option>
-			</select>
+		<div class="sidebar-wrapper">
+			<div class="sidebar-title-container">
+				<p style="font-family: Cambria; font-size: 10px;">
+					<strong>Paper:</strong> Comparing renewable energy import options: Toward a multidimensional approach<br>
+					<strong>Authors:</strong> Knodt, M., Misic M., Plank F., Radojicic N., Schulze K., Serin B.<br>
+					<strong>Funding:</strong> Clean Circles | Hessian Ministry of Higher Education, Research, Science and the Arts
+				</p>
+			</div>
+		
+			<div class="sidebar">
+				<select id="dataset-selector" onchange="changeDataset()">
+				  <option value="https://raw.githubusercontent.com/Nikola-Radojicic/google-charts-website/main/data98v1.csv">Dataset 98</option>
+				  <option value="https://raw.githubusercontent.com/Nikola-Radojicic/google-charts-website/main/data137v1.csv">Dataset 137</option>
+				</select>
 
-			
-			<div class="container">
-			
-				<div class="column">
-					<label class="bold-label">Adjust factor weights</label>
 				
-					<!-- Group for Economy -->
-					<div class="slider-group">
-						<div class="slider-group-header">
-							<label class="bold-label">Economy:</label>
-							<div class="info-icon">
-								?
-								<span class="tooltip-text">
-									<u>Indicators included:</u><br>
-									<strong>costs:</strong> LCOE, distance<br>
-									<strong>stability:</strong> inflation, LPI
-								</span>						
-							</div>
-						</div>						
-						<!-- Slider for costs -->
-						<div class="individual-slider">
-							<label for="w_costs">costs:  <span id="w_costs_val">0.5</span></label>
-							<input type="range" min="0" max="1" step="0.01" value="0.5" id="w_costs">
-						</div>
-						
-						<!-- Slider for stability -->
-						<div class="individual-slider">
-							<label for="w_costs">stability: <span id="w_stability_val">0.5</span></label>
-							<input type="range" min="0" max="1" step="0.01" value="0.5" id="w_stability">
-						</div>
-					</div>
+				<div class="container">
+				
+					<div class="column">
+						<label class="bold-label">Adjust factor weights</label>
 					
-					<!-- Group for Sustainability -->
-					<div class="slider-group">
-						<div class="slider-group-header">
-							<label class="bold-label">Sustainability:</label>
-							<div class="info-icon">
-								?
-								<span class="tooltip-text">
-									<u>Indicators included:</u><br>
-									<strong>development:</strong> Access to electricity, Access to clean cooking fuels<br>
-									<strong>decarbonization:</strong> Fossil fuels in the electricity mix, CO2 emissions from electricity & heat prod.,Installed RE electricity generation capacity<br>
-									<strong>risks:</strong> water use restrictions, exposure to natural hazards
-								</span>						
-							</div>
-						</div>								
-						<!-- Slider for sust_dev -->
-						<div class="individual-slider">
-							<div class="slider-label-lock">
-								<label for="w_sust_dev"><strong>development: </strong><span id="w_sust_dev_val">.33̅</span></label>
-								<div class='toggle' id='lock_w_sust_dev' onclick="toggleLock('w_sust_dev')">
-									<div class='slide'>
-										<span class='fa fa-circle-o'></span>
-									</div>
-								</div>
-							</div>							
-							<input type="range" min="0" max="1" step="0.01" value="0.33333333333" id="w_sust_dev">
-							
-						</div>
-
-						<!-- Slider for decarb -->
-						<div class="individual-slider">
-							<div class="slider-label-lock">
-								<label for="w_decarb"><strong>decarbonisation: </strong><span id="w_decarb_val">.33̅</span></label>
-								<div class='toggle' id='lock_w_decarb' onclick="toggleLock('w_decarb')">
-									<div class='slide'>
-										<span class='fa fa-circle-o'></span>
-									</div>
-								</div>
-							</div>							
-							<input type="range" min="0" max="1" step="0.01" value="0.33333333333" id="w_decarb">
-							
-						</div>
-
-						<!-- Slider for risks -->
-						<div class="individual-slider">
-							<div class="slider-label-lock">
-								<label for="w_risks"><strong>risks: </strong><span id="w_risks_val">.33̅</span></label>
-								<div class='toggle' id='lock_w_risks' onclick="toggleLock('w_risks')">
-									<div class='slide'>
-										<span class='fa fa-circle-o'></span>
-									</div>
+						<!-- Group for Economy -->
+						<div class="slider-group">
+							<div class="slider-group-header">
+								<label class="bold-label">Economy:</label>
+								<div class="info-icon">
+									?
+									<span class="tooltip-text">
+										<u>Indicators included:</u><br>
+										<strong>costs:</strong> LCOE, distance<br>
+										<strong>stability:</strong> inflation, LPI
+									</span>						
 								</div>
 							</div>						
-							<input type="range" min="0" max="1" step="0.01" value="0.33333333333" id="w_risks">
-							
-						</div>
-					</div>
-					
-					
-					<!-- Group for Regulation & Governance -->
-					<div class="slider-group">
-						<div class="slider-group-header">
-							<label class="bold-label">Regulation & Governance::</label>
-							<div class="info-icon">
-								?
-								<span class="tooltip-text">
-									<u>Indicators included:</u><br>
-									<strong>governance:</strong> quality of governance, open markets, regulatory efficiency, labour rights<br>
-									<strong>env. regulation:</strong> RE regulation, env. assessment laws<br>
-								</span>						
+							<!-- Slider for costs -->
+							<div class="individual-slider">
+								<label for="w_costs">costs:  <span id="w_costs_val">0.5</span></label>
+								<input type="range" min="0" max="1" step="0.01" value="0.5" id="w_costs">
 							</div>
-						</div>	
-				
-						<!-- Slider for governance -->
-						<div class="individual-slider">
-							<label for="w_governance">governance: <span id="w_governance_val">0.5</span></label>
-							<input type="range" min="0" max="1" step="0.01" value="0.5" id="w_governance">
 							
-						</div>
-				
-						<!-- Slider for env_regul -->
-						<div class="individual-slider">
-							<label for="w_env_regul">environmental regulation: <span id="w_env_regul_val">0.5</span></label>
-							<input type="range" min="0" max="1" step="0.01" value="0.5" id="w_env_regul">
-							
-						</div>
-					</div>
-							
-					
-					<!-- Group for Innovation & Cooperation -->
-					<div class="slider-group">
-						<div class="slider-group-header">
-							<label class="bold-label">Innovation & Cooperation:</label>
-							<div class="info-icon">
-								?
-								<span class="tooltip-text">
-									<u>Indicators included:</u><br>
-									<strong>innovation potential:</strong> RE innovation activity, human capital, innovation capacity, H2 innovation<br>
-									<strong>int. cooperation:</strong> energy partnership w/ Germany, H2 trade w/ Germany, energy cooperation w/ the EU<br>
-								</span>						
+							<!-- Slider for stability -->
+							<div class="individual-slider">
+								<label for="w_costs">stability: <span id="w_stability_val">0.5</span></label>
+								<input type="range" min="0" max="1" step="0.01" value="0.5" id="w_stability">
 							</div>
-						</div>	
+						</div>
+						
+						<!-- Group for Sustainability -->
+						<div class="slider-group">
+							<div class="slider-group-header">
+								<label class="bold-label">Sustainability:</label>
+								<div class="info-icon">
+									?
+									<span class="tooltip-text">
+										<u>Indicators included:</u><br>
+										<strong>development:</strong> Access to electricity, Access to clean cooking fuels<br>
+										<strong>decarbonization:</strong> Fossil fuels in the electricity mix, CO2 emissions from electricity & heat prod.,Installed RE electricity generation capacity<br>
+										<strong>risks:</strong> water use restrictions, exposure to natural hazards
+									</span>						
+								</div>
+							</div>								
+							<!-- Slider for sust_dev -->
+							<div class="individual-slider">
+								<div class="slider-label-lock">
+									<label for="w_sust_dev"><strong>development: </strong><span id="w_sust_dev_val">.33̅</span></label>
+									<div class='toggle' id='lock_w_sust_dev' onclick="toggleLock('w_sust_dev')">
+										<div class='slide'>
+											<span class='fa fa-circle-o'></span>
+										</div>
+									</div>
+								</div>							
+								<input type="range" min="0" max="1" step="0.01" value="0.33333333333" id="w_sust_dev">
+								
+							</div>
 
-						
-						<!-- Slider for in_pot -->
-						<div class="individual-slider">
-							<label for="w_in_pot">innovation potential: <span id="w_in_pot_val">0.5</span></label>
-							<input type="range" min="0" max="1" step="0.01" value="0.5" id="w_in_pot">
-							
-						</div>
-						
-						<!-- Slider for int_coop -->
-						<div class="individual-slider">
-							<label for="w_int_coop">international cooperation: <span id="w_int_coop_val">0.5</span></label>
-							<input type="range" min="0" max="1" step="0.01" value="0.5" id="w_int_coop">
-							
-						</div>
-					</div>
-				</div>
+							<!-- Slider for decarb -->
+							<div class="individual-slider">
+								<div class="slider-label-lock">
+									<label for="w_decarb"><strong>decarbonisation: </strong><span id="w_decarb_val">.33̅</span></label>
+									<div class='toggle' id='lock_w_decarb' onclick="toggleLock('w_decarb')">
+										<div class='slide'>
+											<span class='fa fa-circle-o'></span>
+										</div>
+									</div>
+								</div>							
+								<input type="range" min="0" max="1" step="0.01" value="0.33333333333" id="w_decarb">
+								
+							</div>
 
-				<div class="column column-right">
-					<label class="bold-label">Adjust dimension weights</label>
-					<div class="slider-group">
-						<!-- Sliders for the factors themselves -->
-						<div class="individual-slider">
-							<div class="slider-label-lock">
-								<label for="w_Economy"><strong>Economy: </strong><span id="w_Economy_val">0.25</span></label>
-								<div class='toggle' id='lock_w_Economy' onclick="toggleLock('w_Economy')">
-									<div class='slide'>
-										<span class='fa fa-circle-o'></span>
+							<!-- Slider for risks -->
+							<div class="individual-slider">
+								<div class="slider-label-lock">
+									<label for="w_risks"><strong>risks: </strong><span id="w_risks_val">.33̅</span></label>
+									<div class='toggle' id='lock_w_risks' onclick="toggleLock('w_risks')">
+										<div class='slide'>
+											<span class='fa fa-circle-o'></span>
+										</div>
 									</div>
-								</div>
+								</div>						
+								<input type="range" min="0" max="1" step="0.01" value="0.33333333333" id="w_risks">
+								
 							</div>
-							<input type="range" min="0" max="1" step="0.01" value="0.25" id="w_Economy">							
 						</div>
 						
-						<div class="individual-slider">
-							<div class="slider-label-lock">
-								<label for="w_Sustainability"><strong>Sustainability: </strong><span id="w_Sustainability_val">0.25</span></label>
-								<div class='toggle'id='lock_w_Sustainability' onclick="toggleLock('w_Sustainability')">
-									<div class='slide'>
-										<span class='fa fa-circle-o'></span>
-									</div>
-								</div>
-							</div>
-							<input type="range" min="0" max="1" step="0.01" value="0.25" id="w_Sustainability">
-							
-						</div>		
 						
-						<div class="individual-slider">
-							<div class="slider-label-lock">
-								<label for="w_RegulationGovernance"><strong>Regulation & Governance: </strong><span id="w_RegulationGovernance_val">0.25</span></label>
-								<div class='toggle'id='lock_w_RegulationGovernance' onclick="toggleLock('w_RegulationGovernance')">
-									<div class='slide'>
-										<span class='fa fa-circle-o'></span>
-									</div>
+						<!-- Group for Regulation & Governance -->
+						<div class="slider-group">
+							<div class="slider-group-header">
+								<label class="bold-label">Regulation & Governance::</label>
+								<div class="info-icon">
+									?
+									<span class="tooltip-text">
+										<u>Indicators included:</u><br>
+										<strong>governance:</strong> quality of governance, open markets, regulatory efficiency, labour rights<br>
+										<strong>env. regulation:</strong> RE regulation, env. assessment laws<br>
+									</span>						
 								</div>
+							</div>	
+					
+							<!-- Slider for governance -->
+							<div class="individual-slider">
+								<label for="w_governance">governance: <span id="w_governance_val">0.5</span></label>
+								<input type="range" min="0" max="1" step="0.01" value="0.5" id="w_governance">
+								
 							</div>
-							<input type="range" min="0" max="1" step="0.01" value="0.25" id="w_RegulationGovernance">
-							
-						</div>			
+					
+							<!-- Slider for env_regul -->
+							<div class="individual-slider">
+								<label for="w_env_regul">environmental regulation: <span id="w_env_regul_val">0.5</span></label>
+								<input type="range" min="0" max="1" step="0.01" value="0.5" id="w_env_regul">
+								
+							</div>
+						</div>
+								
 						
-						<div class="individual-slider">
-							<div class="slider-label-lock">
-								<label for="w_InnovationCooperation"><strong>Innovation & Cooperation: </strong><span id="w_InnovationCooperation_val">0.25</span></label>
-								<div class='toggle'id='lock_w_InnovationCooperation' onclick="toggleLock('w_InnovationCooperation')">
-									<div class='slide'>
-										<span class='fa fa-circle-o'></span>
-									</div>
+						<!-- Group for Innovation & Cooperation -->
+						<div class="slider-group">
+							<div class="slider-group-header">
+								<label class="bold-label">Innovation & Cooperation:</label>
+								<div class="info-icon">
+									?
+									<span class="tooltip-text">
+										<u>Indicators included:</u><br>
+										<strong>innovation potential:</strong> RE innovation activity, human capital, innovation capacity, H2 innovation<br>
+										<strong>int. cooperation:</strong> energy partnership w/ Germany, H2 trade w/ Germany, energy cooperation w/ the EU<br>
+									</span>						
 								</div>
-							</div>
-							<input type="range" min="0" max="1" step="0.01" value="0.25" id="w_InnovationCooperation">
+							</div>	
+
 							
-						</div>						
+							<!-- Slider for in_pot -->
+							<div class="individual-slider">
+								<label for="w_in_pot">innovation potential: <span id="w_in_pot_val">0.5</span></label>
+								<input type="range" min="0" max="1" step="0.01" value="0.5" id="w_in_pot">
+								
+							</div>
+							
+							<!-- Slider for int_coop -->
+							<div class="individual-slider">
+								<label for="w_int_coop">international cooperation: <span id="w_int_coop_val">0.5</span></label>
+								<input type="range" min="0" max="1" step="0.01" value="0.5" id="w_int_coop">
+								
+							</div>
+						</div>
 					</div>
-					<button onclick="resetSliders()">Reset weights</button>
-					<div class="table-toggle-container">
-						<button id="toggleTableButton">Show|Hide top 10 countries</button>
-						<div id="topCountriesTableContainer" style="display: none;"></div>
-					</div>					
+
+					<div class="column column-right">
+						<label class="bold-label">Adjust dimension weights</label>
+						<div class="slider-group">
+							<!-- Sliders for the factors themselves -->
+							<div class="individual-slider">
+								<div class="slider-label-lock">
+									<label for="w_Economy"><strong>Economy: </strong><span id="w_Economy_val">0.25</span></label>
+									<div class='toggle' id='lock_w_Economy' onclick="toggleLock('w_Economy')">
+										<div class='slide'>
+											<span class='fa fa-circle-o'></span>
+										</div>
+									</div>
+								</div>
+								<input type="range" min="0" max="1" step="0.01" value="0.25" id="w_Economy">							
+							</div>
+							
+							<div class="individual-slider">
+								<div class="slider-label-lock">
+									<label for="w_Sustainability"><strong>Sustainability: </strong><span id="w_Sustainability_val">0.25</span></label>
+									<div class='toggle'id='lock_w_Sustainability' onclick="toggleLock('w_Sustainability')">
+										<div class='slide'>
+											<span class='fa fa-circle-o'></span>
+										</div>
+									</div>
+								</div>
+								<input type="range" min="0" max="1" step="0.01" value="0.25" id="w_Sustainability">
+								
+							</div>		
+							
+							<div class="individual-slider">
+								<div class="slider-label-lock">
+									<label for="w_RegulationGovernance"><strong>Regulation & Governance: </strong><span id="w_RegulationGovernance_val">0.25</span></label>
+									<div class='toggle'id='lock_w_RegulationGovernance' onclick="toggleLock('w_RegulationGovernance')">
+										<div class='slide'>
+											<span class='fa fa-circle-o'></span>
+										</div>
+									</div>
+								</div>
+								<input type="range" min="0" max="1" step="0.01" value="0.25" id="w_RegulationGovernance">
+								
+							</div>			
+							
+							<div class="individual-slider">
+								<div class="slider-label-lock">
+									<label for="w_InnovationCooperation"><strong>Innovation & Cooperation: </strong><span id="w_InnovationCooperation_val">0.25</span></label>
+									<div class='toggle'id='lock_w_InnovationCooperation' onclick="toggleLock('w_InnovationCooperation')">
+										<div class='slide'>
+											<span class='fa fa-circle-o'></span>
+										</div>
+									</div>
+								</div>
+								<input type="range" min="0" max="1" step="0.01" value="0.25" id="w_InnovationCooperation">
+								
+							</div>						
+						</div>
+						<button onclick="resetSliders()">Reset weights</button>
+						<div class="table-toggle-container">
+							<button id="toggleTableButton">Show|Hide top 10 countries</button>
+							<div id="topCountriesTableContainer" style="display: none;"></div>
+						</div>					
+					</div>
 				</div>
 			</div>
 		</div>
-
 		
 		<div class="selector-container">
 			<label for="continent-selector" class = "bold-label"; style="font-size: 12px; font-family: Cambria;">Select region</label>
@@ -676,7 +693,7 @@
 				<option value="South America">South America</option>
 				<option value="Central America">Central America</option>
 				<option value="Caribbean">Caribbean</option>
-				<option value="Oceania">Australia & Oceania</option>
+				<option value="Oceania">Oceania</option>
 			</select>
 		</div>
 

@@ -1,148 +1,6 @@
         // defining country names w/o using Google API map keys
 		
-		let currentSelectedContinent = 'all'; // Default to 'all' for the world view
-		
-		const countryNames = {
-		  "AL": "Albania",
-		  "DZ": "Algeria",
-		  "AO": "Angola",
-		  "AG": "Antigua and Barbuda",
-		  "AR": "Argentina",
-		  "AU": "Australia",
-		  "BS": "Bahamas",
-		  "BH": "Bahrain",
-		  "BD": "Bangladesh",
-		  "BB": "Barbados",
-		  "BE": "Belgium",
-		  "BA": "Bosnia and Herzegovina",
-		  "BR": "Brazil",
-		  "BZ": "Belize",
-		  "SB": "Solomon Islands",
-		  "VG": "British Virgin Islands",
-		  "BN": "Brunei",
-		  "BG": "Bulgaria",
-		  "MM": "Myanmar",
-		  "KH": "Cambodia",
-		  "CM": "Cameroon",
-		  "CA": "Canada",
-		  "CV": "Cape Verde",
-		  "LK": "Sri Lanka",
-		  "CL": "Chile",
-		  "CN": "China",
-		  "TW": "Taiwan",
-		  "CO": "Colombia",
-		  "CG": "Congo - Brazzaville",
-		  "CD": "Congo - Kinshasa",
-		  "CR": "Costa Rica",
-		  "HR": "Croatia",
-		  "CU": "Cuba",
-		  "CY": "Cyprus",
-		  "BJ": "Benin",
-		  "DK": "Denmark",
-		  "DO": "Dominican Republic",
-		  "EC": "Ecuador",
-		  "GQ": "Equatorial Guinea",
-		  "ER": "Eritrea",
-		  "EE": "Estonia",
-		  "FJ": "Fiji",
-		  "FI": "Finland",
-		  "FR": "France",
-		  "DJ": "Djibouti",
-		  "GA": "Gabon",
-		  "GE": "Georgia",
-		  "GH": "Ghana",
-		  "GR": "Greece",
-		  "GL": "Greenland",
-		  "GD": "Grenada",
-		  "GT": "Guatemala",
-		  "GN": "Guinea",
-		  "GY": "Guyana",
-		  "HT": "Haiti",
-		  "HN": "Honduras",
-		  "HK": "Hong Kong SAR China",
-		  "IS": "Iceland",
-		  "IN": "India",
-		  "ID": "Indonesia",
-		  "IR": "Iran",
-		  "IQ": "Iraq",
-		  "IE": "Ireland",
-		  "IL": "Israel",
-		  "IT": "Italy",
-		  "CI": "Ivory Coast",
-		  "JM": "Jamaica",
-		  "JP": "Japan",
-		  "KE": "Kenya",
-		  "KP": "North Korea",
-		  "KR": "South Korea",
-		  "KW": "Kuwait",
-		  "LB": "Lebanon",
-		  "LV": "Latvia",
-		  "LR": "Liberia",
-		  "LY": "Libya",
-		  "LT": "Lithuania",
-		  "MO": "Macao SAR China",
-		  "MG": "Madagascar",
-		  "MY": "Malaysia",
-		  "MT": "Malta",
-		  "MR": "Mauritania",
-		  "MU": "Mauritius",
-		  "MX": "Mexico",
-		  "ME": "Montenegro",
-		  "MA": "Morocco",
-		  "MZ": "Mozambique",
-		  "OM": "Oman",
-		  "NA": "Namibia",
-		  "NL": "Netherlands",
-		  "CW": "Curaçao",
-		  "VU": "Vanuatu",
-		  "NZ": "New Zealand",
-		  "NI": "Nicaragua",
-		  "NG": "Nigeria",
-		  "NO": "Norway",
-		  "FM": "Federated States of Micronesia",
-		  "PK": "Pakistan",
-		  "PA": "Panama",
-		  "PG": "Papua New Guinea",
-		  "PE": "Peru",
-		  "PH": "Philippines",
-		  "PL": "Poland",
-		  "PT": "Portugal",
-		  "TL": "Timor-Leste",
-		  "QA": "Qatar",
-		  "RO": "Romania",
-		  "RU": "Russia",
-		  "LC": "Saint Lucia",
-		  "VC": "Saint Vincent and the Grenadines",
-		  "SA": "Saudi Arabia",
-		  "SN": "Senegal",
-		  "SL": "Sierra Leone",
-		  "SG": "Singapore",
-		  "VN": "Vietnam",
-		  "SI": "Slovenia",
-		  "SO": "Somalia",
-		  "ZA": "South Africa",
-		  "ES": "Spain",
-		  "SD": "Sudan",
-		  "SR": "Suriname",
-		  "SE": "Sweden",
-		  "SY": "Syria",
-		  "TH": "Thailand",
-		  "TG": "Togo",
-		  "TT": "Trinidad and Tobago",
-		  "AE": "United Arab Emirates",
-		  "TN": "Tunisia",
-		  "TR": "Turkey",
-		  "UA": "Ukraine",
-		  "EG": "Egypt",
-		  "GB": "United Kingdom",
-		  "TZ": "Tanzania",
-		  "US": "United States",
-		  "UY": "Uruguay",
-		  "VE": "Venezuela",
-		  "YE": "Yemen",
-		  "DE": "Germany"
-		};
-		
+		let currentSelectedContinent = 'all'; // Default to 'all' for the world view		
 		
 		const countryContinents = {
 		  "AL": "Europe",
@@ -178,7 +36,7 @@
 		  "CR": "Central America",
 		  "HR": "Europe",
 		  "CU": "Caribbean",
-		  "CY": "Europe",
+		  "CY": "Asia",
 		  "BJ": "Africa",
 		  "DK": "Europe",
 		  "DO": "Caribbean",
@@ -191,10 +49,10 @@
 		  "FR": "Europe",
 		  "DJ": "Africa",
 		  "GA": "Africa",
-		  "GE": "Europe",
+		  "GE": "Asia",
 		  "GH": "Africa",
 		  "GR": "Europe",
-		  "GL": "Europe",
+		  "GL": "North America",
 		  "GD": "Caribbean",
 		  "GT": "Central America",
 		  "GN": "Africa",
@@ -244,7 +102,7 @@
 		  "FM": "Oceania",
 		  "PK": "Asia",
 		  "PA": "Central America",
-		  "PG": "Asia",
+		  "PG": "Oceania",
 		  "PE": "South America",
 		  "PH": "Asia",
 		  "PL": "Europe",
@@ -273,7 +131,7 @@
 		  "TT": "Caribbean",
 		  "AE": "Asia",
 		  "TN": "Africa",
-		  "TR": "Europe",
+		  "TR": "Asia",
 		  "UA": "Europe",
 		  "EG": "Africa",
 		  "GB": "Europe",
@@ -290,7 +148,7 @@
 		google.charts.load('current', {
             'packages': ['geochart']
         });
-        google.charts.setOnLoadCallback(() => fetchDataAndDrawChart('https://raw.githubusercontent.com/Nikola-Radojicic/google-charts-website/main/data98.csv'));
+        google.charts.setOnLoadCallback(() => fetchDataAndDrawChart('https://raw.githubusercontent.com/Nikola-Radojicic/google-charts-website/main/data98v1.csv'));
 		
 		let globalServerData;
 		
@@ -351,15 +209,22 @@
 
 		function drawRegionsMap(serverData, selectedContinent = 'all') {
 			const dataTable = [['country', 'Index']];
-			for (let entry of serverData) {
-				const country = entry.country;
-				// Only add data for countries in the selected continent (or all continents)
-				if (selectedContinent === 'all' || countryContinents[country] === selectedContinent) {
-					const { index } = calculateIndex(entry.costs, entry.stability, entry.in_pot, entry.int_coop, entry.governance, entry.env_regul, entry.sust_dev, entry.decarb, entry.risks);
-					const countryName = countryNames[country] || country;
-					dataTable.push([countryName, index]); // Ensure that index is a number
+
+			// Iterate through all countries in the countryNames list
+			serverData.forEach(countryData => {
+				let index = null; // Set null for countries without index (colored blue)
+				const countryCode = countryData.country;
+				const countryName = countryData.countryName; // Get country name from the dataset
+
+				// Check if the country is Germany, if so, set index to null
+				if (countryCode === 'DE') {
+					index = null;
+				} else if (countryData && (selectedContinent === 'all' || countryContinents[countryCode] === selectedContinent)) {
+					index = calculateIndex(countryData.costs, countryData.stability, countryData.in_pot, countryData.int_coop, countryData.governance, countryData.env_regul, countryData.sust_dev, countryData.decarb, countryData.risks).index;
 				}
-			}
+
+				dataTable.push([countryName || countryCode, index]); // Use country name or fall back to country code
+			});
 
 			const data = google.visualization.arrayToDataTable(dataTable);
 
@@ -369,29 +234,28 @@
 				case 'Africa': regionCode = '002'; break;
 				case 'Asia': regionCode = '142'; break;
 				case 'Europe': regionCode = '150'; break;
-				case 'North America': regionCode = '021'; break; // Northern America
+				case 'North America': regionCode = '021'; break;
 				case 'South America': regionCode = '005'; break;
-				case 'Central America': regionCode = '013'; break;	
-				case 'Caribbean': regionCode = '029'; break;	
+				case 'Central America': regionCode = '013'; break;  
+				case 'Caribbean': regionCode = '029'; break;  
 				case 'Oceania': regionCode = '009'; break;
 				default: regionCode = 'world'; break;
 			}
 
 			const options = {
 				legend: 'none',
-				region: regionCode, // Set the region based on the selected continent
+				region: regionCode,
 				displayMode: 'regions',
 				resolution: 'countries',
-			};
+				datalessRegionColor: 'white', // Color for countries not in the dataTable
+				defaultColor: 'blue', // Default color for countries with null index values
+			};          
 
 			const chart = new google.visualization.GeoChart(document.getElementById('regions_div'));
 			chart.draw(data, options);
 		}
-	
-		
 
 
-		
 		
         function calculateIndex(costs, stability, in_pot, int_coop, governance, env_regul, sust_dev, decarb, risks) {
 			const w_costs = parseFloat(document.getElementById("w_costs").value);
