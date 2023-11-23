@@ -59,7 +59,7 @@
 		position: sticky;
 		top: 0%;
 		flex-basis: 400px;
-		height: 70vh; /* Height can be adjusted as needed */
+		height: 75vh; /* Height can be adjusted as needed */
 		border: 1px solid #ccc;
 		padding: 10px;
 		box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
@@ -432,10 +432,30 @@
 		padding-left: 3px;
 	}	
 	
+	.sidebar-title-container {
+		display: flex; /* Enables Flexbox layout */
+		justify-content: space-between; /* Spreads out the two columns */
+		align-items: center; /* Vertically centers content in each column */
+	}	
+	
+	.sidebar-text {
+		flex: 1; /* Takes up the remaining space */
+		padding-right: 0px; /* Adds some space between text and logo */
+		width: 230px;
+		font-family: Cambria;
+		font-size: 14px;
+	}	
+	
+	.sidebar-text p {
+		margin: 0; /* Removes default paragraph margin */
+		word-wrap: break-word; /* Ensures text wraps within the container */
+	}	
+	.sidebar-logo {
+		flex-basis: auto; /* Adjusts the base size of the logo container */
+	}	
 	.sidebar-title-container #logo {
 		display: block; /* ensures the image is block-level */
-		width: 100%; /* adjusts the width of the image */
-		max-width: 200px; /* maximum width, adjust as needed */
+		max-width: 100px; /* maximum width, adjust as needed */
 		height: auto; /* maintains aspect ratio */
 		margin-bottom: 5px;
 		
@@ -447,6 +467,8 @@
 	}
 	
     #logo {
+		width: 150px;
+		height: auto;
 		opacity: 0.7;
 		flex-shrink: 1;
 		border: 1px solid #ccc;
@@ -469,10 +491,16 @@
 	
 		<div class="sidebar-wrapper">
 			<div class="sidebar-title-container">
-				<a href="https://www.tu-darmstadt.de/clean-circles/about_cc/index.de.jsp" target="_blank" id="logo-link"style="color: transparent;">		
-					<img src="https://raw.githubusercontent.com/Nikola-Radojicic/google-charts-website/main/Clean_Circles_Logo.jpg" alt="Logo" id="logo" />
-				</a>
+				<div class="sidebar-text">
+					<p>Funded by Hessian Ministry of Higher Education, Research, Science and the Arts</p>
+				</div>
+				<div class="sidebar-logo">
+					<a href="https://www.tu-darmstadt.de/clean-circles/about_cc/index.de.jsp" target="_blank" id="logo-link" style="color: transparent;">        
+						<img src="https://raw.githubusercontent.com/Nikola-Radojicic/google-charts-website/main/Clean_Circles_Logo.jpg" alt="Logo" id="logo" />
+					</a>
+				</div>
 			</div>
+
 		
 			<div class="sidebar">
 				<select id="dataset-selector" onchange="changeDataset()">
