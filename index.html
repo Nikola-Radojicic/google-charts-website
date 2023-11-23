@@ -41,17 +41,18 @@
 		flex-shrink: 1;
 	}
 	
-
-    #logo {
-		position: fixed;  /* Fixed positioning relative to the viewport */
-		top: 10px;       /* Adjust as necessary for spacing from the top */
-		right: 10px;     /* Adjust as necessary for spacing from the right */
-		z-index: 100;   /* Ensures the logo stays on top of other content */
-		width: 150px; 
-		height: auto;
-		opacity: 0.7;
-		flex-shrink: 1;
+	
+	.title-container h1 {
+		font-family: Cambria; /* Replace 'YourFontFamily' with your desired font */
+		font-size: 16px; /* Adjust font size as needed */
+		margin: 10; /* Removes default margin */
 	}
+
+	.title-container .authors {
+		font-family: Cambria; /* Replace 'YourFontFamily' with your desired font for authors */
+		font-size: 16px; /* Adjust font size as needed */
+	}
+	
 	
 	
 	.sidebar {
@@ -72,6 +73,10 @@
 		align-items: center;
 		background: rgba(220 220 220);
 	}
+	
+	.sidebar-wrapper {
+		padding: 5px;
+	}	
 	
 	#dataset-selector {
 		align-self: flex-start; /* Align the selector to the start (left) */
@@ -427,15 +432,26 @@
 		padding-left: 3px;
 	}	
 	
-	.sidebar-title-container {
-		background-color: rgb(244, 244, 244); /* Example background color */
-		padding-left: 5px; /* Example padding */
-		text-align: center; /* Center the text inside the container */
-		/* Add more styling as needed */
-		text-align: left;
-		border: 1px solid black; /* Add a black border */
+	.sidebar-title-container #logo {
+		display: block; /* ensures the image is block-level */
+		width: 100%; /* adjusts the width of the image */
+		max-width: 200px; /* maximum width, adjust as needed */
+		height: auto; /* maintains aspect ratio */
 		margin-bottom: 5px;
+		
+
 	}
+
+	.sidebar-title-container #logo-link {
+		text-decoration: none; /* removes underline from the link */
+	}
+	
+    #logo {
+		opacity: 0.7;
+		flex-shrink: 1;
+		border: 1px solid #ccc;
+	}
+
 
 
 	
@@ -453,11 +469,9 @@
 	
 		<div class="sidebar-wrapper">
 			<div class="sidebar-title-container">
-				<p style="font-family: Cambria; font-size: 10px;">
-					<strong>Paper:</strong> Comparing renewable energy import options: Toward a multidimensional approach<br>
-					<strong>Authors:</strong> Knodt, M., Misic M., Plank F., Radojicic N., Schulze K., Serin B.<br>
-					<strong>Funding:</strong> Clean Circles | Hessian Ministry of Higher Education, Research, Science and the Arts
-				</p>
+				<a href="https://www.tu-darmstadt.de/clean-circles/about_cc/index.de.jsp" target="_blank" id="logo-link"style="color: transparent;">		
+					<img src="https://raw.githubusercontent.com/Nikola-Radojicic/google-charts-website/main/Clean_Circles_Logo.jpg" alt="Logo" id="logo" />
+				</a>
 			</div>
 		
 			<div class="sidebar">
@@ -703,14 +717,11 @@
 		<div class="main-content">
 			<div class="title-container">
 				<a href="https://www.example.com" target="_blank">
-					<h1>Comparing renewable energy import options</h1>
+					<h1>Comparing renewable energy import options: Toward a multidimensional approach</h1>
 				</a>
-			</div>			
-			<a href="https://www.tu-darmstadt.de/clean-circles/about_cc/index.de.jsp" target="_blank" id="logo-link"style="color: transparent;">		
-				<img src="https://raw.githubusercontent.com/Nikola-Radojicic/google-charts-website/main/Clean_Circles_Logo.jpg" alt="Logo" id="logo" />
-			</a>
-			
-		
+				<p class="authors">Michèle Knodt, Mile Misic, Friedrich Plank, Nikola Radojicic, Kai Schulze, Berkin Serin</p>
+			</div>
+					
 			<div id="regions_div" class="custom-chart-container" style="width: 900px; height: 700px;"></div>
 			<div id="tooltip" style="position: absolute; display: none; background: white; border: 1px solid black; padding: 5px; border-radius: 5px; pointer-events: none; z-index: 1000;">
 				<!-- Tooltip content will be dynamically updated -->

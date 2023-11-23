@@ -1,8 +1,5 @@
-        // defining country names w/o using Google API map keys
 		
-		let currentSelectedContinent = 'all'; // Default to 'all' for the world view		
-		
-		
+			
 		
 		google.charts.load('current', {
             'packages': ['geochart']
@@ -10,6 +7,7 @@
         google.charts.setOnLoadCallback(() => fetchDataAndDrawChart('https://raw.githubusercontent.com/Nikola-Radojicic/google-charts-website/main/data98v2.csv'));
 		
 		let globalServerData;
+		let currentSelectedContinent = 'all'; // Default to 'all' for the world view
 		
 		function changeDataset() {
 			const selectedDataset = document.getElementById("dataset-selector").value;
