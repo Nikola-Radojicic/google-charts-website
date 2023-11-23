@@ -2,153 +2,12 @@
 		
 		let currentSelectedContinent = 'all'; // Default to 'all' for the world view		
 		
-		const countryContinents = {
-		  "AL": "Europe",
-		  "DZ": "Africa",
-		  "AO": "Africa",
-		  "AG": "Caribbean",
-		  "AR": "South America",
-		  "AU": "Oceania",
-		  "BS": "Caribbean",
-		  "BH": "Asia",
-		  "BD": "Asia",
-		  "BB": "Caribbean",
-		  "BE": "Europe",
-		  "BA": "Europe",
-		  "BR": "South America",
-		  "BZ": "Central America",
-		  "SB": "Oceania",
-		  "VG": "Caribbean",
-		  "BN": "Asia",
-		  "BG": "Europe",
-		  "MM": "Asia",
-		  "KH": "Asia",
-		  "CM": "Africa",
-		  "CA": "North America",
-		  "CV": "Africa",
-		  "LK": "Asia",
-		  "CL": "South America",
-		  "CN": "Asia",
-		  "TW": "Asia",
-		  "CO": "South America",
-		  "CG": "Africa",
-		  "CD": "Africa",
-		  "CR": "Central America",
-		  "HR": "Europe",
-		  "CU": "Caribbean",
-		  "CY": "Asia",
-		  "BJ": "Africa",
-		  "DK": "Europe",
-		  "DO": "Caribbean",
-		  "EC": "South America",
-		  "GQ": "Africa",
-		  "ER": "Africa",
-		  "EE": "Europe",
-		  "FJ": "Oceania",
-		  "FI": "Europe",
-		  "FR": "Europe",
-		  "DJ": "Africa",
-		  "GA": "Africa",
-		  "GE": "Asia",
-		  "GH": "Africa",
-		  "GR": "Europe",
-		  "GL": "North America",
-		  "GD": "Caribbean",
-		  "GT": "Central America",
-		  "GN": "Africa",
-		  "GY": "South America",
-		  "HT": "Caribbean",
-		  "HN": "Central America",
-		  "HK": "Asia",
-		  "IS": "Europe",
-		  "IN": "Asia",
-		  "ID": "Asia",
-		  "IR": "Asia",
-		  "IQ": "Asia",
-		  "IE": "Europe",
-		  "IL": "Asia",
-		  "IT": "Europe",
-		  "CI": "Africa",
-		  "JM": "Caribbean",
-		  "JP": "Asia",
-		  "KE": "Africa",
-		  "KP": "Asia",
-		  "KR": "Asia",
-		  "KW": "Asia",
-		  "LB": "Asia",
-		  "LV": "Europe",
-		  "LR": "Africa",
-		  "LY": "Africa",
-		  "LT": "Europe",
-		  "MO": "Asia",
-		  "MG": "Africa",
-		  "MY": "Asia",
-		  "MT": "Europe",
-		  "MR": "Africa",
-		  "MU": "Africa",
-		  "MX": "Central America",
-		  "ME": "Europe",
-		  "MA": "Africa",
-		  "MZ": "Africa",
-		  "OM": "Asia",
-		  "NA": "Africa",
-		  "NL": "Europe",
-		  "CW": "Caribbean",
-		  "VU": "Oceania",
-		  "NZ": "Oceania",
-		  "NI": "Central America",
-		  "NG": "Africa",
-		  "NO": "Europe",
-		  "FM": "Oceania",
-		  "PK": "Asia",
-		  "PA": "Central America",
-		  "PG": "Oceania",
-		  "PE": "South America",
-		  "PH": "Asia",
-		  "PL": "Europe",
-		  "PT": "Europe",
-		  "TL": "Asia",
-		  "QA": "Asia",
-		  "RO": "Europe",
-		  "RU": "Europe",
-		  "LC": "Caribbean",
-		  "VC": "Caribbean",
-		  "SA": "Asia",
-		  "SN": "Africa",
-		  "SL": "Africa",
-		  "SG": "Asia",
-		  "VN": "Asia",
-		  "SI": "Europe",
-		  "SO": "Africa",
-		  "ZA": "Africa",
-		  "ES": "Europe",
-		  "SD": "Africa",
-		  "SR": "South America",
-		  "SE": "Europe",
-		  "SY": "Asia",
-		  "TH": "Asia",
-		  "TG": "Africa",
-		  "TT": "Caribbean",
-		  "AE": "Asia",
-		  "TN": "Africa",
-		  "TR": "Asia",
-		  "UA": "Europe",
-		  "EG": "Africa",
-		  "GB": "Europe",
-		  "TZ": "Africa",
-		  "US": "North America",
-		  "UY": "South America",
-		  "VE": "South America",
-		  "YE": "Asia",
-		  "DE": "Europe"
-		};		
-		
 		
 		
 		google.charts.load('current', {
             'packages': ['geochart']
         });
-        google.charts.setOnLoadCallback(() => fetchDataAndDrawChart('https://raw.githubusercontent.com/Nikola-Radojicic/google-charts-website/main/data98v1.csv'));
+        google.charts.setOnLoadCallback(() => fetchDataAndDrawChart('https://raw.githubusercontent.com/Nikola-Radojicic/google-charts-website/main/data98v2.csv'));
 		
 		let globalServerData;
 		
@@ -163,27 +22,41 @@
 			drawRegionsMap(globalServerData, selectedContinent);
 		}
 		
-		
-        function fetchDataAndDrawChart(url) {
-            fetch(url)
+		let countryNames = {};
+
+		function extractCountryNames(serverData) {
+			let names = {};
+			serverData.forEach(countryData => {
+				const countryCode = countryData.country;
+				const countryName = countryData.countryName;
+				names[countryCode] = countryName;
+			});
+			return names;
+		}
+
+		function fetchDataAndDrawChart(url) {
+			fetch(url)
 				.then(response => {
 					if (!response.ok) {
-						throw new Error('Network response was not ok ' + response.statusText);
+						throw new Error('Network response was not ok: ' + response.statusText);
 					}
 					return response.text();
 				})
 				.then(text => {
 					const data = parseCSV(text);
 					globalServerData = data;
-					drawRegionsMap(data, currentSelectedContinent);
+					countryNames = extractCountryNames(data); // Extract and populate country names
+
+					// Ensure that the chart and dropdowns are populated only after data is fetched
+					drawRegionsMap(globalServerData, currentSelectedContinent);
 					drawTopCountriesTable();
+					populateCountryDropdowns();
 				})
 				.catch(error => {
 					console.error('Error fetching data:', error);
 				});
-				
-			drawTopCountriesTable(); // Add this line
 		}
+
 		
 		function parseCSV(csvText) {
 			const lines = csvText.split("\n");
@@ -215,13 +88,14 @@
 				let index = null; // Set null for countries without index (colored blue)
 				const countryCode = countryData.country;
 				const countryName = countryData.countryName; // Get country name from the dataset
+				const continent = countryData.continent; // Use continent from the dataset
 
 				// Check if the country is Germany, if so, set index to null
 				if (countryCode === 'DE') {
 					index = null;
-				} else if (countryData && (selectedContinent === 'all' || countryContinents[countryCode] === selectedContinent)) {
-					index = calculateIndex(countryData.costs, countryData.stability, countryData.in_pot, countryData.int_coop, countryData.governance, countryData.env_regul, countryData.sust_dev, countryData.decarb, countryData.risks).index;
-				}
+				} else if (countryData && (selectedContinent === 'all' || continent === selectedContinent)) {
+						index = calculateIndex(countryData.costs, countryData.stability, countryData.in_pot, countryData.int_coop, countryData.governance, countryData.env_regul, countryData.sust_dev, countryData.decarb, countryData.risks).index;
+					}
 
 				dataTable.push([countryName || countryCode, index]); // Use country name or fall back to country code
 			});
@@ -386,6 +260,7 @@
 			// Redraw the map with the current continent
 			if (globalServerData) {
 				drawRegionsMap(globalServerData, currentSelectedContinent);
+				drawTopCountriesTable();
 			}
 		}
 
@@ -435,17 +310,10 @@
 
 			// Ensure the changed slider is set to its current value
 			changedSlider.value = changedValue.toFixed(2);
+			drawTopCountriesTable();
 		}
 
 		
-		
-
-
-		// Call this function on each lock toggle click
-
-
-
-			
 		
 		function updateMainWeightsAndRedraw() {
 			updateWeightAndRedraw("w_Economy", "w_Economy_val");
@@ -500,12 +368,14 @@
 				document.getElementById("w_stability").value = complement.toFixed(2);
 				updateWeightAndRedraw("w_costs", "w_costs_val");
 				updateWeightAndRedraw("w_stability", "w_stability_val");
+				drawTopCountriesTable(); // Call this last to update the table
             });
             document.getElementById("w_stability").addEventListener("input", function() {
 			    const complement = 1 - parseFloat(this.value);
 				document.getElementById("w_costs").value = complement.toFixed(2);
 				updateWeightAndRedraw("w_stability", "w_stability_val");
 				updateWeightAndRedraw("w_costs", "w_costs_val");
+				drawTopCountriesTable(); // Call this last to update the table
             });
 			
 			// Innovation Potential and International Cooperation
@@ -514,12 +384,14 @@
 				document.getElementById("w_int_coop").value = complement.toFixed(2);
 				updateWeightAndRedraw("w_in_pot", "w_in_pot_val");
 				updateWeightAndRedraw("w_int_coop", "w_int_coop_val");
+				drawTopCountriesTable(); // Call this last to update the table
             });
             document.getElementById("w_int_coop").addEventListener("input", function() {
 			    const complement = 1 - parseFloat(this.value);
 				document.getElementById("w_in_pot").value = complement.toFixed(2);
 				updateWeightAndRedraw("w_int_coop", "w_int_coop_val");
 				updateWeightAndRedraw("w_in_pot", "w_in_pot_val");
+				drawTopCountriesTable(); // Call this last to update the table
             });
 
 			
@@ -529,6 +401,7 @@
 				updateWeightAndRedraw("w_sust_dev", "w_sust_dev_val");
 				updateWeightAndRedraw("w_decarb", "w_decarb_val");
 				updateWeightAndRedraw("w_risks", "w_risks_val");
+				drawTopCountriesTable(); // Call this last to update the table
 			});
 			
 			document.getElementById("w_decarb").addEventListener("input", function() {
@@ -536,6 +409,7 @@
 				updateWeightAndRedraw("w_decarb", "w_decarb_val");
 				updateWeightAndRedraw("w_sust_dev", "w_sust_dev_val");
 				updateWeightAndRedraw("w_risks", "w_risks_val");
+				drawTopCountriesTable(); // Call this last to update the table
 			});
 			
 			document.getElementById("w_risks").addEventListener("input", function() {
@@ -543,6 +417,7 @@
 				updateWeightAndRedraw("w_risks", "w_risks_val");
 				updateWeightAndRedraw("w_sust_dev", "w_sust_dev_val");
 				updateWeightAndRedraw("w_decarb", "w_decarb_val");
+				drawTopCountriesTable(); // Call this last to update the table
 			});
 			
 			// Regulation & Governance sub-factors
@@ -551,6 +426,7 @@
 				document.getElementById("w_env_regul").value = complement.toFixed(2);
 				updateWeightAndRedraw("w_governance", "w_governance_val");
 				updateWeightAndRedraw("w_env_regul", "w_env_regul_val");
+				drawTopCountriesTable(); // Call this last to update the table
 			});
 
 			document.getElementById("w_env_regul").addEventListener("input", function() {
@@ -558,6 +434,7 @@
 				document.getElementById("w_governance").value = complement.toFixed(2);
 				updateWeightAndRedraw("w_env_regul", "w_env_regul_val");
 				updateWeightAndRedraw("w_governance", "w_governance_val");
+				drawTopCountriesTable(); // Call this last to update the table
 			});
 			
 			// FOR FOUR DIMENSIONS
@@ -565,21 +442,25 @@
 			document.getElementById("w_Economy").addEventListener("input", function() {
 				adjustWeights("w_Economy");
 				updateMainWeightsAndRedraw();
+				drawTopCountriesTable(); // Call this last to update the table
 			});
 			
 			document.getElementById("w_InnovationCooperation").addEventListener("input", function() {
 				adjustWeights("w_InnovationCooperation");
 				updateMainWeightsAndRedraw();
+				drawTopCountriesTable(); // Call this last to update the table
 			});
 			
 			document.getElementById("w_Sustainability").addEventListener("input", function() {
 				adjustWeights("w_Sustainability");
 				updateMainWeightsAndRedraw();
+				drawTopCountriesTable(); // Call this last to update the table
 			});
 			
 			document.getElementById("w_RegulationGovernance").addEventListener("input", function() {
 				adjustWeights("w_RegulationGovernance");
 				updateMainWeightsAndRedraw();
+				drawTopCountriesTable(); // Call this last to update the table
 			});
 
         }
@@ -633,8 +514,6 @@
 		// For main dimensions
 		["w_Economy", "w_InnovationCooperation", "w_Sustainability", "w_RegulationGovernance"].forEach(id => handleMouseWheel(id));
 
-
-
 		
 		function updateWeightAndRedraw(sliderId, valueId) {
 			const slider = document.getElementById(sliderId);
@@ -682,9 +561,6 @@
 			});
 		});
 		
-
-
-
 				
 		var numberOfColumnsToShow = 3;
 		
@@ -726,8 +602,6 @@
 				}
 			});
 		}
-
-		
 		
 		
 		// Event handler when a country is selected from the dropdown.
@@ -819,13 +693,23 @@
 		// Initialize the dropdowns with Select2 and set up the event handler.
 		$(document).ready(function() {
 		  $('.search-dropdown').select2().on('change', handleCountrySelect);
-		  fetchDataAndDrawChart('https://raw.githubusercontent.com/Nikola-Radojicic/google-charts-website/main/data98.csv'); // Call this to initialize the data and table on page load
+		  fetchDataAndDrawChart('https://raw.githubusercontent.com/Nikola-Radojicic/google-charts-website/main/data98v2.csv'); // Call this to initialize the data and table on page load
 
 		});
 		
 		function drawTopCountriesTable() {
+			// Ensure that globalServerData is populated
+			if (!globalServerData || globalServerData.length === 0) {
+				console.error("Global server data is empty");
+				return;
+			}
+
 			// Sort the globalServerData by index value in descending order
-			const sortedData = [...globalServerData].sort((a, b) => calculateIndexFromData(b).index - calculateIndexFromData(a).index);
+			const sortedData = [...globalServerData].sort((a, b) => {
+				const indexA = calculateIndexFromData(a).index;
+				const indexB = calculateIndexFromData(b).index;
+				return indexB - indexA;
+			});
 
 			// Get the top 10 countries
 			const top10 = sortedData.slice(0, 10);
@@ -833,13 +717,16 @@
 			// Create HTML for the table
 			let tableHtml = '<table><tr><th>Rank</th><th>Country</th><th>Index</th></tr>';
 			top10.forEach((data, index) => {
-				tableHtml += `<tr><td>${index + 1}</td><td>${countryNames[data.country] || data.country}</td><td>${calculateIndexFromData(data).index.toFixed(3)}</td></tr>`;
+				const countryName = data.countryName || 'Unknown'; // Use countryName from the data
+				const indexValue = calculateIndexFromData(data).index.toFixed(3);
+				tableHtml += `<tr><td>${index + 1}</td><td>${countryName}</td><td>${indexValue}</td></tr>`;
 			});
 			tableHtml += '</table>';
 
 			// Set the innerHTML of the table container
 			document.getElementById('topCountriesTableContainer').innerHTML = tableHtml;
 		}
+
 
 		
 		function resetSliders() {
@@ -890,9 +777,6 @@
 			
 			drawTopCountriesTable();
 		}
-		
-
-
 		
 		window.onload = function() {
 			addEventListeners();
