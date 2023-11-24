@@ -4,7 +4,7 @@
 		google.charts.load('current', {
             'packages': ['geochart']
         });
-        google.charts.setOnLoadCallback(() => fetchDataAndDrawChart('https://raw.githubusercontent.com/Nikola-Radojicic/google-charts-website/main/data98v2.csv'));
+        google.charts.setOnLoadCallback(() => fetchDataAndDrawChart('https://raw.githubusercontent.com/Nikola-Radojicic/google-charts-website/main/data98v3.csv'));
 		
 		let globalServerData;
 		let currentSelectedContinent = 'all'; // Default to 'all' for the world view
@@ -159,11 +159,11 @@
 			
 			// Create an object with all the sub-indexes and the main index
 			return {
-				index: parseFloat((w_Economy * Economy + w_InnovationCooperation * InnovationCooperation + w_Sustainability * Sustainability + w_RegulationGovernance * RegulationGovernance).toFixed(3)),
-				Economy: parseFloat(Economy.toFixed(3)),
-				InnovationCooperation: parseFloat(InnovationCooperation.toFixed(3)),
-				Sustainability: parseFloat(Sustainability.toFixed(3)),
-				RegulationGovernance: parseFloat(RegulationGovernance.toFixed(3))
+				index: parseFloat((w_Economy * Economy + w_InnovationCooperation * InnovationCooperation + w_Sustainability * Sustainability + w_RegulationGovernance * RegulationGovernance).toFixed(2)),
+				Economy: parseFloat(Economy.toFixed(2)),
+				InnovationCooperation: parseFloat(InnovationCooperation.toFixed(2)),
+				Sustainability: parseFloat(Sustainability.toFixed(2)),
+				RegulationGovernance: parseFloat(RegulationGovernance.toFixed(2))
 			};
             
 		}
@@ -691,7 +691,7 @@
 		// Initialize the dropdowns with Select2 and set up the event handler.
 		$(document).ready(function() {
 		  $('.search-dropdown').select2().on('change', handleCountrySelect);
-		  fetchDataAndDrawChart('https://raw.githubusercontent.com/Nikola-Radojicic/google-charts-website/main/data98v2.csv'); // Call this to initialize the data and table on page load
+		  fetchDataAndDrawChart('https://raw.githubusercontent.com/Nikola-Radojicic/google-charts-website/main/data98v3.csv'); // Call this to initialize the data and table on page load
 
 		});
 		
@@ -716,7 +716,7 @@
 			let tableHtml = '<table><tr><th>Rank</th><th>Country</th><th>Index</th></tr>';
 			top10.forEach((data, index) => {
 				const countryName = data.countryName || 'Unknown'; // Use countryName from the data
-				const indexValue = calculateIndexFromData(data).index.toFixed(3);
+				const indexValue = calculateIndexFromData(data).index.toFixed(2);
 				tableHtml += `<tr><td>${index + 1}</td><td>${countryName}</td><td>${indexValue}</td></tr>`;
 			});
 			tableHtml += '</table>';
