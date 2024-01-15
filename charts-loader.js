@@ -4,7 +4,7 @@
 		google.charts.load('current', {
             'packages': ['geochart']
         });
-        google.charts.setOnLoadCallback(() => fetchDataAndDrawChart('https://raw.githubusercontent.com/Nikola-Radojicic/google-charts-website/main/data98v3.csv'));
+        google.charts.setOnLoadCallback(() => fetchDataAndDrawChart('https://raw.githubusercontent.com/Nikola-Radojicic/google-charts-website/main/data137v3.csv'));
 		
 		let globalServerData;
 		let currentSelectedContinent = 'all'; // Default to 'all' for the world view
@@ -73,11 +73,12 @@
 				result.push(obj);
 			}
 			return result;  // Return the parsed CSV as an array of objects
-		}
-		
-		
+		}	
 		
 
+
+		
+				
 		function drawRegionsMap(serverData, selectedContinent = 'all') {
 			const dataTable = [['country', 'Index']];
 
@@ -126,6 +127,37 @@
 			const chart = new google.visualization.GeoChart(document.getElementById('regions_div'));
 			chart.draw(data, options);
 		}
+		
+		
+		function drawMarkersMap(serverData, selectedContinent = 'all') {
+			var markerData = [['Country', 'Marker']];
+
+			serverData.forEach(countryData => {
+				const countryCode = countryData.country;
+				const countryName = countryData.countryName;
+				const continent = countryData.continent;
+				const enpargerbin = countryData.enpargerbin;
+
+				// Check if enpargerbin is 1 and if the country is in the selected continent (or all continents are selected)
+				if (enpargerbin === "1" && (selectedContinent === 'all' || continent === selectedContinent)) {
+					markerData.push([countryName || countryCode, 1]); // The number '1' here is arbitrary, just to indicate a marker
+				}
+			});
+
+			var data = google.visualization.arrayToDataTable(markerData);
+
+			var options = {
+				sizeAxis: { minValue: 0, maxValue: 1 }, // Adjust the size axis as needed
+				region: regionCode, // Set to the same region as in drawRegionsMap
+				displayMode: 'markers',
+				colorAxis: {colors: ['#e7711c', '#4374e0']} // You can customize the colors
+			};
+
+			var chart = new google.visualization.GeoChart(document.getElementById('markers_div'));
+			chart.draw(data, options);
+		}
+		
+		
 
 
 		
@@ -691,7 +723,7 @@
 		// Initialize the dropdowns with Select2 and set up the event handler.
 		$(document).ready(function() {
 		  $('.search-dropdown').select2().on('change', handleCountrySelect);
-		  fetchDataAndDrawChart('https://raw.githubusercontent.com/Nikola-Radojicic/google-charts-website/main/data98v3.csv'); // Call this to initialize the data and table on page load
+		  fetchDataAndDrawChart('https://raw.githubusercontent.com/Nikola-Radojicic/google-charts-website/main/data137v3.csv'); // Call this to initialize the data and table on page load
 
 		});
 		
