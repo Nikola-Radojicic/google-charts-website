@@ -4,7 +4,7 @@
 		google.charts.load('current', {
             'packages': ['geochart']
         });
-        google.charts.setOnLoadCallback(() => fetchDataAndDrawChart('https://raw.githubusercontent.com/Nikola-Radojicic/google-charts-website/main/data137v3.csv'));
+        google.charts.setOnLoadCallback(() => fetchDataAndDrawChart('https://raw.githubusercontent.com/Nikola-Radojicic/google-charts-website/main/data113_zscored.csv'));
 		
 		let globalServerData;
 		let currentSelectedContinent = 'all'; // Default to 'all' for the world view
@@ -723,7 +723,7 @@
 		// Initialize the dropdowns with Select2 and set up the event handler.
 		$(document).ready(function() {
 		  $('.search-dropdown').select2().on('change', handleCountrySelect);
-		  fetchDataAndDrawChart('https://raw.githubusercontent.com/Nikola-Radojicic/google-charts-website/main/data137v3.csv'); // Call this to initialize the data and table on page load
+		  fetchDataAndDrawChart('https://raw.githubusercontent.com/Nikola-Radojicic/google-charts-website/main/data113_zscored.csv'); // Call this to initialize the data and table on page load
 
 		});
 		
