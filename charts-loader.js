@@ -132,7 +132,7 @@
 				displayMode: 'regions',
 				resolution: 'countries',
 				datalessRegionColor: 'white', // Color for countries not in the dataTable
-				defaultColor: 'blue', // Default color for countries with null index values
+				defaultColor: 'red', // Default color for countries with null index values
 				colorAxis: {
 					minValue: minIndex,
 					maxValue: maxIndex,
