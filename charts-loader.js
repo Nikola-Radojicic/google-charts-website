@@ -81,6 +81,8 @@
 				
 		function drawRegionsMap(serverData, selectedContinent = 'all') {
 			const dataTable = [['country', 'Index']];
+			let minIndex = Number.POSITIVE_INFINITY;
+			let maxIndex = Number.NEGATIVE_INFINITY;			
 
 			// Iterate through all countries in the countryNames list
 			serverData.forEach(countryData => {
@@ -93,12 +95,21 @@
 				if (countryCode === 'DE') {
 					index = null;
 				} else if (countryData && (selectedContinent === 'all' || continent === selectedContinent)) {
-						index = calculateIndex(countryData.costs, countryData.stability, countryData.in_pot, countryData.int_coop, countryData.governance, countryData.env_regul, countryData.sust_dev, countryData.decarb, countryData.risks).index;
+					index = calculateIndex(countryData.costs, countryData.stability, countryData.in_pot, countryData.int_coop, countryData.governance, countryData.env_regul, countryData.sust_dev, countryData.decarb, countryData.risks).index;
+					if (index !== null) {
+						minIndex = Math.min(minIndex, index);
+						maxIndex = Math.max(maxIndex, index);
 					}
+				}
 
 				dataTable.push([countryName || countryCode, index]); // Use country name or fall back to country code
 			});
 
+
+			const quintileRange = (maxIndex - minIndex) / 5;
+			const colors = ['#fde725', '#5dc863', '#21908c', '#3b528b', '#440154']; // Define your 5 colors here
+			
+			
 			const data = google.visualization.arrayToDataTable(dataTable);
 
 			// Map options - focus on the selected continent
@@ -116,13 +127,25 @@
 			}
 
 			const options = {
-				legend: 'none',
+				
 				region: regionCode,
 				displayMode: 'regions',
 				resolution: 'countries',
 				datalessRegionColor: 'white', // Color for countries not in the dataTable
 				defaultColor: 'blue', // Default color for countries with null index values
-			};          
+				colorAxis: {
+					minValue: minIndex,
+					maxValue: maxIndex,
+					colors: colors,
+					values: [
+						minIndex,
+						minIndex + quintileRange,
+						minIndex + 2 * quintileRange,
+						minIndex + 3 * quintileRange,
+						maxIndex
+					]
+				}
+			};				          
 
 			const chart = new google.visualization.GeoChart(document.getElementById('regions_div'));
 			chart.draw(data, options);
