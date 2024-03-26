@@ -86,15 +86,13 @@
 
 			// Iterate through all countries in the countryNames list
 			serverData.forEach(countryData => {
-				let index = null; // Set null for countries without index (colored blue)
 				const countryCode = countryData.country;
 				const countryName = countryData.countryName; // Get country name from the dataset
 				const continent = countryData.continent; // Use continent from the dataset
+				let index = null; // Set null for countries without index (colored blue)
 
 				// Check if the country is Germany, if so, set index to null
-				if (countryCode === 'DE') {
-					index = null;
-				} else if (countryData && (selectedContinent === 'all' || continent === selectedContinent)) {
+				if (countryCode !== 'DE' && (selectedContinent === 'all' || continent === selectedContinent)) {
 					index = calculateIndex(countryData.costs, countryData.stability, countryData.in_pot, countryData.int_coop, countryData.governance, countryData.env_regul, countryData.sust_dev, countryData.decarb, countryData.risks).index;
 					if (index !== null) {
 						minIndex = Math.min(minIndex, index);
