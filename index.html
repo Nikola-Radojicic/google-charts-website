@@ -499,7 +499,7 @@
 				<div class="container">
 				
 					<div class="column">
-						<label class="bold-label">Adjust factor weights</label>
+						<label class="bold-label">Adjust criteria</label>
 					
 						<!-- Group for Economy -->
 						<div class="slider-group">
@@ -509,20 +509,20 @@
 									?
 									<span class="tooltip-text">
 										<u>Indicators included:</u><br>
-										<strong>costs:</strong> LCOE, distance<br>
-										<strong>stability:</strong> inflation, LPI
+										<strong>costs:</strong> LCOE, Distance<br>
+										<strong>stability:</strong> Inflation, LPI
 									</span>						
 								</div>
 							</div>						
 							<!-- Slider for costs -->
 							<div class="individual-slider">
-								<label for="w_costs">costs:  <span id="w_costs_val">0.5</span></label>
+								<label for="w_costs">Costs:  <span id="w_costs_val">0.5</span></label>
 								<input type="range" min="0" max="1" step="0.01" value="0.5" id="w_costs">
 							</div>
 							
 							<!-- Slider for stability -->
 							<div class="individual-slider">
-								<label for="w_costs">stability: <span id="w_stability_val">0.5</span></label>
+								<label for="w_costs">Stability: <span id="w_stability_val">0.5</span></label>
 								<input type="range" min="0" max="1" step="0.01" value="0.5" id="w_stability">
 							</div>
 						</div>
@@ -535,16 +535,16 @@
 									?
 									<span class="tooltip-text">
 										<u>Indicators included:</u><br>
-										<strong>development:</strong> Access to electricity, Access to clean cooking fuels<br>
-										<strong>decarbonization:</strong> Fossil fuels in the electricity mix, CO2 emissions from electricity & heat prod.,Installed RE electricity generation capacity<br>
-										<strong>risks:</strong> water use restrictions, exposure to natural hazards
+										<strong>Development:</strong> Access to electricity, Access to clean cooking fuels, Installed RE electricity generation capacity<br>
+										<strong>Decarbonization:</strong> Fossil fuels in the electricity mix, CO2 emissions from electricity & heat prod.<br>
+										<strong>Risks:</strong> Water use restrictions, Exposure to natural hazards
 									</span>						
 								</div>
 							</div>								
 							<!-- Slider for sust_dev -->
 							<div class="individual-slider">
 								<div class="slider-label-lock">
-									<label for="w_sust_dev"><strong>development: </strong><span id="w_sust_dev_val">.33̅</span></label>
+									<label for="w_sust_dev">Development:<span id="w_sust_dev_val">.33̅</span></label>
 									<div class='toggle' id='lock_w_sust_dev' onclick="toggleLock('w_sust_dev')">
 										<div class='slide'>
 											<span class='fa fa-circle-o'></span>
@@ -558,7 +558,7 @@
 							<!-- Slider for decarb -->
 							<div class="individual-slider">
 								<div class="slider-label-lock">
-									<label for="w_decarb"><strong>decarbonisation: </strong><span id="w_decarb_val">.33̅</span></label>
+									<label for="w_decarb">Decarbonisation:<span id="w_decarb_val">.33̅</span></label>
 									<div class='toggle' id='lock_w_decarb' onclick="toggleLock('w_decarb')">
 										<div class='slide'>
 											<span class='fa fa-circle-o'></span>
@@ -572,7 +572,7 @@
 							<!-- Slider for risks -->
 							<div class="individual-slider">
 								<div class="slider-label-lock">
-									<label for="w_risks"><strong>risks: </strong><span id="w_risks_val">.33̅</span></label>
+									<label for="w_risks">Risks:<span id="w_risks_val">.33̅</span></label>
 									<div class='toggle' id='lock_w_risks' onclick="toggleLock('w_risks')">
 										<div class='slide'>
 											<span class='fa fa-circle-o'></span>
@@ -588,27 +588,27 @@
 						<!-- Group for Regulation & Governance -->
 						<div class="slider-group">
 							<div class="slider-group-header">
-								<label class="bold-label">Regulation & Governance::</label>
+								<label class="bold-label">Regulation & Governance:</label>
 								<div class="info-icon">
 									?
 									<span class="tooltip-text">
 										<u>Indicators included:</u><br>
-										<strong>governance:</strong> quality of governance, open markets, regulatory efficiency, labour rights<br>
-										<strong>env. regulation:</strong> RE regulation, env. assessment laws<br>
+										<strong>Quality of governance:</strong> Quality of governance, Open markets, Regulatory efficiency<br>
+										<strong>RE regulation:</strong> Incentives and regulatory support for RE, Legal Framework for RE, Env. assessment laws<br>
 									</span>						
 								</div>
 							</div>	
 					
 							<!-- Slider for governance -->
 							<div class="individual-slider">
-								<label for="w_governance">governance: <span id="w_governance_val">0.5</span></label>
+								<label for="w_governance">Quality of governance: <span id="w_governance_val">0.5</span></label>
 								<input type="range" min="0" max="1" step="0.01" value="0.5" id="w_governance">
 								
 							</div>
 					
 							<!-- Slider for env_regul -->
 							<div class="individual-slider">
-								<label for="w_env_regul">environmental regulation: <span id="w_env_regul_val">0.5</span></label>
+								<label for="w_env_regul">RE regulation: <span id="w_env_regul_val">0.5</span></label>
 								<input type="range" min="0" max="1" step="0.01" value="0.5" id="w_env_regul">
 								
 							</div>
@@ -623,8 +623,8 @@
 									?
 									<span class="tooltip-text">
 										<u>Indicators included:</u><br>
-										<strong>innovation potential:</strong> RE innovation activity, human capital, innovation capacity, H2 innovation<br>
-										<strong>int. cooperation:</strong> energy partnership w/ Germany, H2 trade w/ Germany, energy cooperation w/ the EU<br>
+										<strong>Innovation potential:</strong> RE innovation activity, Human capital, Innovation capacity, H2 innovation<br>
+										<strong>Int. cooperation:</strong> Energy partnership w/ Germany, Energy cooperation w/ the EU<br>
 									</span>						
 								</div>
 							</div>	
@@ -632,14 +632,14 @@
 							
 							<!-- Slider for in_pot -->
 							<div class="individual-slider">
-								<label for="w_in_pot">innovation potential: <span id="w_in_pot_val">0.5</span></label>
+								<label for="w_in_pot">Innovation potential: <span id="w_in_pot_val">0.5</span></label>
 								<input type="range" min="0" max="1" step="0.01" value="0.5" id="w_in_pot">
 								
 							</div>
 							
 							<!-- Slider for int_coop -->
 							<div class="individual-slider">
-								<label for="w_int_coop">international cooperation: <span id="w_int_coop_val">0.5</span></label>
+								<label for="w_int_coop">International cooperation: <span id="w_int_coop_val">0.5</span></label>
 								<input type="range" min="0" max="1" step="0.01" value="0.5" id="w_int_coop">
 								
 							</div>
@@ -647,7 +647,7 @@
 					</div>
 
 					<div class="column column-right">
-						<label class="bold-label">Adjust dimension weights</label>
+						<label class="bold-label">Adjust dimensions</label>
 						<div class="slider-group">
 							<!-- Sliders for the factors themselves -->
 							<div class="individual-slider">
