@@ -7,6 +7,7 @@ google.charts.setOnLoadCallback(() => fetchDataAndDrawChart('https://raw.githubu
 let globalServerData;
 let currentSelectedContinent = 'all'; // Default to 'all' for the world view
 let radarChart;
+let barChart;
 
 function changeDataset() {
     const selectedDataset = document.getElementById("dataset-selector").value;
@@ -380,14 +381,122 @@ function populateCountryDropdowns() {
 }
 
 // Handle country selection and update radar chart
+$(document).ready(function () {
+    initializeRadarChart();
+    initializeBarChart();
+
+    $('#country1').on('change', handleCountrySelect);
+    $('#country2').on('change', handleCountrySelect);
+    $('#country3').on('change', handleCountrySelect);
+    $('#country4').on('change', handleCountrySelect);
+    $('#country5').on('change', handleCountrySelect);
+});
+
 function handleCountrySelect() {
     updateRadarChart();
+    updateBarChart();
 }
 
-// Function to update the radar chart
+function initializeRadarChart() {
+    const data = {
+        labels: [
+            'Economy\n&\nTechnology', 
+            'Innovation\n&\nCooperation', 
+            'Environment\n&\nDevelopment', 
+            'Regulation\n&\nGovernance'
+        ],
+        datasets: []
+    };
+
+    const config = {
+        type: 'radar',
+        data: data,
+        options: {
+            elements: {
+                line: {
+                    borderWidth: 0 // Set line border width to 0
+                }
+            },
+            scales: {
+                r: {
+                    angleLines: {
+                        display: true
+                    },
+                    suggestedMin: 0,
+                    suggestedMax: 1,
+                    pointLabels: {
+                        font: {
+                            size: 14
+                        },
+                        callback: function(label) {
+                            return label.split('\n');
+                        }
+                    }
+                }
+            },
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            let label = context.dataset.label || '';
+                            if (label) {
+                                label += ': ';
+                            }
+                            label += Math.round(context.raw * 100) / 100;
+                            return label;
+                        }
+                    }
+                }
+            }
+        }
+    };
+
+    radarChart = new Chart(
+        document.getElementById('radarChart'),
+        config
+    );
+}
+
+function initializeBarChart() {
+    const data = {
+        labels: [],
+        datasets: [{
+            label: 'Overall Index',
+            data: [],
+            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 1
+        }]
+    };
+
+    const config = {
+        type: 'bar',
+        data: data,
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    suggestedMin: 0,
+                    suggestedMax: 100
+                }
+            }
+        }
+    };
+
+    barChart = new Chart(
+        document.getElementById('barChart'),
+        config
+    );
+}
+
 function updateRadarChart() {
     const countryIds = ['country1', 'country2', 'country3', 'country4', 'country5'];
-    const labels = ['Economy & Technology', 'Innovation & Cooperation', 'Environment & Development', 'Regulation & Governance'];
+    const labels = [
+        'Economy\n&\nTechnology', 
+        'Innovation\n        &\nCooperation', 
+        'Environment\n&\nDevelopment', 
+        'Regulation\n&\nGovernance'
+    ];
 
     const datasets = countryIds.map((countryId, index) => {
         const countrySelect = document.getElementById(countryId);
@@ -407,39 +516,33 @@ function updateRadarChart() {
             fill: true,
             backgroundColor: `rgba(${index * 50}, ${index * 50 + 100}, ${index * 50 + 200}, 0.2)`,
             borderColor: `rgba(${index * 50}, ${index * 50 + 100}, ${index * 50 + 200}, 1)`,
-            pointBackgroundColor: `rgba(${index * 50}, ${index * 50 + 100}, ${index * 50 + 200}, 1)`
+            pointBackgroundColor: `rgba(${index * 50}, ${index * 50 + 100}, ${index * 50 + 200}, 1)`,
+            borderWidth: 1 // Set border width to 1
         };
     }).filter(dataset => dataset !== null);
 
-    const data = {
-        labels: labels,
-        datasets: datasets
-    };
+    radarChart.data.datasets = datasets;
+    radarChart.update();
+}
 
-    const config = {
-        type: 'radar',
-        data: data,
-        options: {
-            scales: {
-                r: {
-                    angleLines: {
-                        display: true
-                    },
-                    suggestedMin: 0,
-                    suggestedMax: 1
-                }
-            }
+function updateBarChart() {
+    const countryIds = ['country1', 'country2', 'country3', 'country4', 'country5'];
+    const labels = [];
+    const data = [];
+
+    countryIds.forEach((countryId, index) => {
+        const countrySelect = document.getElementById(countryId);
+        if (countrySelect && countrySelect.value) {
+            const countryName = countrySelect.options[countrySelect.selectedIndex].text;
+            labels.push(countryName);
+            const overallIndex = parseFloat(document.getElementById(`${countryId}-result`).innerText) || 0;
+            data.push(overallIndex);
         }
-    };
+    });
 
-    if (radarChart) {
-        radarChart.destroy(); // Destroy the existing chart if it exists
-    }
-
-    radarChart = new Chart(
-        document.getElementById('radarChart'),
-        config
-    );
+    barChart.data.labels = labels;
+    barChart.data.datasets[0].data = data;
+    barChart.update();
 }
 
 // Ensure the radar chart is updated when the country selection changes
@@ -449,6 +552,75 @@ document.addEventListener('DOMContentLoaded', function () {
         const selectElement = document.getElementById(selectorId);
         if (selectElement) {
             selectElement.addEventListener('change', updateRadarChart);
+        }
+    });
+});
+
+
+// Function to update the bar chart
+function handleCountrySelect() {
+    updateBarChart();
+}
+
+
+// Function to update the bar chart
+function updateBarChart() {
+    const countryIds = ['country1', 'country2', 'country3', 'country4', 'country5'];
+    const labels = [];
+    const data = [];
+
+    countryIds.forEach((countryId, index) => {
+        const countrySelect = document.getElementById(countryId);
+        if (countrySelect && countrySelect.value) {
+            const countryName = countrySelect.options[countrySelect.selectedIndex].text;
+            labels.push(countryName);
+            const overallIndex = parseFloat(document.getElementById(`${countryId}-result`).innerText) || 0;
+            data.push(overallIndex);
+        }
+    });
+
+    const chartData = {
+        labels: labels,
+        datasets: [{
+            label: 'Overall Index',
+            data: data,
+            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 1
+        }]
+    };
+
+    const config = {
+        type: 'bar',
+        data: chartData,
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    suggestedMin: 0,
+                    suggestedMax: 1
+                }
+            }
+        }
+    };
+
+    if (barChart) {
+        barChart.destroy(); // Destroy the existing chart if it exists
+    }
+
+    barChart = new Chart(
+        document.getElementById('barChart'),
+        config
+    );
+}
+
+// Ensure the bar chart is updated when the country selection changes
+document.addEventListener('DOMContentLoaded', function () {
+    const countrySelectors = ['country1', 'country2', 'country3', 'country4', 'country5'];
+    countrySelectors.forEach(selectorId => {
+        const selectElement = document.getElementById(selectorId);
+        if (selectElement) {
+            selectElement.addEventListener('change', updateBarChart);
         }
     });
 });
@@ -760,6 +932,7 @@ function handleCountrySelect() {
     $('#country4-regulationGovernance').text(result4.RegulationGovernance || '...');
     $('#country5-regulationGovernance').text(result5.RegulationGovernance || '...');
     updateRadarChart();
+	updateBarChart();
 }
 adjustColumns();
 

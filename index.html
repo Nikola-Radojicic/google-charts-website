@@ -204,6 +204,34 @@
             z-index: 20;
         }
 
+        .custom-charts-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            margin-right: 20px; /* Add right margin to the container */
+        }
+
+        #charts_wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-right: 20px; /* Right margin for the charts */
+        }
+        #bar_chart_div {
+            width: 500px;
+            height: 250px;
+            margin-top: 20px; /* Align top of the bar chart with the regions_div */
+        }
+        #star_chart_div {
+            width: 500px;
+            height: 400px;
+            margin-bottom: 20px; /* Align bottom of the star chart with the regions_div */
+			display: flex;
+            justify-content: center;
+            align-items: center;
+            border: none; /* Remove border */			
+        }
+
         #regions_div {
             width: 100%;
             height: auto;
@@ -467,7 +495,6 @@
             margin-top: 20px;
             position: relative;
             z-index: 20;
-            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
         }
     </style>
 </head>
@@ -730,12 +757,17 @@
                 </a>
             </div>
 
-            <div class="custom-charts-container">
-                <div id="regions_div" class="custom-chart-container" style="width: 900px; height: 700px;"></div>
-                <div id="star_chart_div" style="width: 500px; height: 500px;">
-                    <canvas id="radarChart"></canvas>
-                </div>
-            </div>
+			<div class="custom-charts-container">
+				<div id="regions_div" class="custom-chart-container" style="width: 900px; height: 700px;"></div>
+				<div id="charts_wrapper" style="display: flex; flex-direction: column; align-items: center; gap: 30px;">
+					<div id="bar_chart_div" style="width: 500px; height: 250px;">
+						<canvas id="barChart"></canvas>
+					</div>
+					<div id="star_chart_div" style="width: 500px; height: 400px;">
+						<canvas id="radarChart"></canvas>
+					</div>
+				</div>
+			</div>
 
             <div class="comparison-container">
                 <!-- Country Comparison Output -->
